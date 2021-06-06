@@ -71,7 +71,10 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
 
-        Budget::create(['creator_id' => $user->id]);
+        $budget = Budget::create(['creator_id' => $user->id]);
+
+        $user->budget_id = $budget->id;
+        $user->save();
         return $user;
     }
 }

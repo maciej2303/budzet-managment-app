@@ -66,4 +66,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Budget::class, 'creator_id');
     }
+
+    public function budget()
+    {
+        return $this->belongsTo(Budget::class, 'budget_id');
+    }
 }

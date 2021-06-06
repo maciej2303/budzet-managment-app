@@ -20,4 +20,9 @@ class Budget extends Model
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
+
+    public function operations()
+    {
+        return $this->hasMany(Operation::class);
+    }
 }
