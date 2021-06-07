@@ -80,12 +80,11 @@ class Budget extends Component
             $operation->image = str_replace('public/', 'storage/', $image_path);
         }
 
-
         $operation->save();
         $budget = auth()->user()->budget;
         $budget->balance += $this->value;
         $budget->save();
-        session()->flash('message', 'Unit created.');
+        session()->flash('message', 'operation created.');
         $this->creating = false;
         $this->resetInputs();
     }
@@ -98,35 +97,14 @@ class Budget extends Component
 
     public function destroy()
     {
-        $unit = Unit::find($this->selected_id);
-        $unit->delete();
+        $operation = Operation::find($this->selected_id);
+        $this->budget->balance -= $operation->value;
+        $this->budget->save();
+        $operation->delete();
+        //TODO DELETING PHOTOS
+
         $this->selected_id = null;
         $this->deleting = false;
-        $this->resetInputs();
-    }
-
-    public function editing($id)
-    {
-        $this->editing = true;
-        $operation = Operation::find($id);
-        $this->selected_id = $id;
-        $this->value = $operation->value;
-        $this->description = $operation->description;
-        $this->income = $operation->income;
-        $this->image = $operation->image;
-        $this->category_id = $operation->category->id;
-    }
-
-    public function update()
-    {
-        $this->validate();
-        $unit = Unit::find($this->selected_id);
-        $unit->full_name = $this->full_name;
-        $unit->short_name = $this->short_name;
-
-        $unit->save();
-        session()->flash('message', 'Unit created.');
-        $this->editing = false;
         $this->resetInputs();
     }
 
@@ -138,4 +116,33 @@ class Budget extends Component
         $this->income = false;
         $this->category_id = 1;
     }
+
+    // public function editing($id)
+    // {
+    //     $this->editing = true;
+    //     $operation = Operation::find($id);
+    //     $this->selected_id = $id;
+    //     $this->value = $operation->value;
+    //     $this->description = $operation->description;
+    //     $this->income = $operation->income;
+    //     $this->image = $operation->image;
+    //     $this->category_id = $operation->category->id;
+    // }
+
+    // public function update()
+    // {
+    //     $this->validate();
+    //     $operation = Operation::find($this->selected_id);
+    //     if ($this->income == false)
+    //         $this->value = $this->value * -1;
+    //     $operation->value = $this->value;
+    //     $operation->description = $this->description;
+    //     $operation->income = $this->income;
+    //     $operation->category_id = $this->category_id;
+    //     $operation->save();
+
+    //     session()->flash('message', 'operation created.');
+    //     $this->editing = false;
+    //     $this->resetInputs();
+    // }
 }
