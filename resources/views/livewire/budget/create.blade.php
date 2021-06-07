@@ -25,6 +25,16 @@
                     <x-jet-input-error for="value" class="mt-2" />
                 </div>
 
+                <div class="mt-4">
+                <x-jet-label for="date" value="{{ __('Data') }}" />
+                    <input type="date" class="mt-1 block w-3/4"
+                                value={{$date}}
+                                wire:model.defer="date"
+                                wire:keydown.enter="save" />
+
+                    <x-jet-input-error for="value" class="mt-2" />
+                </div>
+
                 <div class="mt-4" >
                 <x-jet-label for="image" value="{{ __('Opis') }}" />
                     <x-jet-input type="description" class="mt-1 block w-3/4"
@@ -49,7 +59,7 @@
                 </div>
 
                 <div class="mt-4" >
-                <x-jet-label for="image" value="{{ __('Zdjęcie (Opcjonalne)') }}" />
+                <x-jet-label for="image" value="{{ __('Plik (Opcjonalne)') }}" />
                     <x-jet-input type="file" class="mt-1 block w-3/4" wire:model.defer="image"
                         wire:keydown.enter="save" />
 

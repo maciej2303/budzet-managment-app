@@ -11,7 +11,7 @@ use Livewire\WithFileUploads;
 class Budget extends Component
 {
     use WithFileUploads;
-    public $creating, $deleting, $editing = false, $budget;
+    public $creating, $deleting, $editing = false, $budget, $date;
     public $value, $description, $image, $income, $category_id, $selected_id;
 
     public $thresholdModal;
@@ -23,6 +23,7 @@ class Budget extends Component
         'image' => 'nullable|file',
         'income' => 'required|boolean',
         'category_id' => 'required',
+        'date' => 'required',
     ];
 
     public function render()
@@ -39,6 +40,7 @@ class Budget extends Component
     public function expense()
     {
         $this->creating = true;
+        $this->date = now()->format('Y-m-d');
         $this->resetInputs();
         $this->income = false;
     }
@@ -46,6 +48,7 @@ class Budget extends Component
     public function profit()
     {
         $this->creating = true;
+        $this->date = now()->format('Y-m-d');
         $this->resetInputs();
         $this->income = true;
     }
@@ -57,6 +60,8 @@ class Budget extends Component
 
     public function setThreshold()
     {
+        if($this->threshold == null)
+            $this->threshold = 0;
         $this->budget->threshold = $this->threshold;
         $this->budget->save();
     }

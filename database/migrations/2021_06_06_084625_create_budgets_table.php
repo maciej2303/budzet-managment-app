@@ -18,7 +18,7 @@ class CreateBudgetsTable extends Migration
             $table->unsignedBigInteger('creator_id');
             $table->foreign('creator_id')->references('id')->on('users');
             $table->decimal('balance', 19, 2)->default(0);
-            $table->decimal('threshold', 19, 2)->default(0);
+            $table->decimal('threshold', 19, 2)->nullable();
             $table->timestamps();
         });
     }

@@ -30,7 +30,7 @@ class Budget extends Model
     {
         $expenses = $this->operations()->whereMonth('created_at', '=', now()->month)->where('income', false)->get()->sum('value');
 
-        if ($this->threshold + $expenses < 0)
+        if ($this->threshold > 0 && $this->threshold + $expenses < 0)
             return true;
 
         return false;
