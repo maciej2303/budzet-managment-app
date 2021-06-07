@@ -25,4 +25,14 @@ class Budget extends Model
     {
         return $this->hasMany(Operation::class);
     }
+
+    public function isThresholdExceeded()
+    {
+        $expenses = $this->operations()->whereMonth('created_at', '=', now()->month)->where('income', false)->get()->sum('value');
+
+        if ($this->threshold + $expenses < 0)
+            return true;
+
+        return false;
+    }
 }

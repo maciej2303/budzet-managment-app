@@ -55,17 +55,17 @@
 
                     <x-jet-input-error for="image" class="mt-2" />
                 </div>
-                
+
             </x-slot>
 
             <x-slot name="footer">
-                <button class="btn btn-white px-4 py-2" wire:click="$toggle('creating')" wire:loading.attr="disabled">
+                <x-jet-secondary-button wire:click="$toggle('creating')" wire:loading.attr="disabled">
                     {{ __('Anuluj') }}
-                </button>
+                </x-jet-secondary-button>
 
-                <button class="btn btn-green px-4 py-2 ml-2" wire:click="save" wire:loading.attr="disabled">
+                <x-jet-button wire:click="save" wire:loading.attr="disabled">
                     {{ __('Zapisz') }}
-                </button>
+                </x-jet-button>
             </x-slot>
         </x-jet-dialog-modal>
     </div>

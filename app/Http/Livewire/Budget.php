@@ -11,8 +11,11 @@ use Livewire\WithFileUploads;
 class Budget extends Component
 {
     use WithFileUploads;
-    public $creating, $deleting, $editing = false;
+    public $creating, $deleting, $editing = false, $budget;
     public $value, $description, $image, $income, $category_id, $selected_id;
+
+    public $thresholdModal;
+    public $threshold;
 
     protected $rules = [
         'value' => 'required|regex:/^\d+(\.\d{1,2})?$/',
@@ -24,10 +27,11 @@ class Budget extends Component
 
     public function render()
     {
-        $budget = auth()->user()->budget;
+        $this->budget = auth()->user()->budget;
+        $this->threshold = $this->budget->threshold;
         return view('livewire.budget.crud', [
-            'budget' => $budget,
-            'operations' => $budget->operations,
+            'budget' => $this->budget,
+            'operations' => $this->budget->operations,
             'categories' => Category::all(),
         ]);
     }
@@ -46,6 +50,17 @@ class Budget extends Component
         $this->income = true;
     }
 
+    public function thresholdModal()
+    {
+        $this->thresholdModal = true;
+    }
+
+    public function setThreshold()
+    {
+        $this->budget->threshold = $this->threshold;
+        $this->budget->save();
+    }
+
 
     public function save()
     {
@@ -59,6 +74,13 @@ class Budget extends Component
         $operation->category_id = $this->category_id;
         $operation->budget_id = auth()->user()->budget->id;
         $operation->user_id = auth()->id();
+
+        if ($this->image) {
+            $image_path = $this->image->store('/public/images/posts');
+            $operation->image = str_replace('public/', 'storage/', $image_path);
+        }
+
+
         $operation->save();
         $budget = auth()->user()->budget;
         $budget->balance += $this->value;
