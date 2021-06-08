@@ -27,7 +27,7 @@
 
                 <div class="mt-4">
                 <x-jet-label for="date" value="{{ __('Data') }}" />
-                    <x-date-picker wire:model="date" id="date"/>
+                    <input class="datepicker" wire:model="date" id="date"/>
 
                     <x-jet-input-error for="date" class="mt-2" />
                 </div>
@@ -77,9 +77,3 @@
         </x-jet-dialog-modal>
     </div>
 </div>
-
-@push('js')
-<script>
-    new Pikaday({ field: document.getElementById('datepicker') })
-</script>
-@endpush

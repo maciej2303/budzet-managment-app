@@ -71,6 +71,7 @@ class Budget extends Component
     public function save()
     {
         $this->validate();
+        dd($this);
         $operation = new Operation();
         if ($this->income == false)
             $this->value = $this->value * -1;
