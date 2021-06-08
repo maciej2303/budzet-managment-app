@@ -26,6 +26,17 @@ class Budget extends Model
         return $this->hasMany(Operation::class);
     }
 
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
+
+    public function allCategories()
+    {
+        $defaultCategories = Category::where('default', 1)->get();
+        return $defaultCategories->merge($this->categories);
+    }
+
     public function isThresholdExceeded()
     {
         $expenses = $this->operations()->whereMonth('created_at', '=', now()->month)->where('income', false)->get()->sum('value');

@@ -18,6 +18,9 @@
                     <x-jet-nav-link href="{{ route('budget.index') }}" :active="request()->routeIs('budget.index')">
                         {{ __('Budżet') }}
                     </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('categories.index') }}" :active="request()->routeIs('categories.index')">
+                        {{ __('Kategorie') }}
+                    </x-jet-nav-link>
                 </div>
             </div>
 
@@ -146,6 +149,9 @@
             </x-jet-responsive-nav-link>
             <x-jet-responsive-nav-link href="{{ route('budget.index') }}" :active="request()->routeIs('budget.index')">
                 {{ __('Budżet') }}
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link href="{{ route('categories.index') }}" :active="request()->routeIs('categories.index')">
+                {{ __('Kategorie') }}
             </x-jet-responsive-nav-link>
         </div>
 

@@ -7,7 +7,8 @@
 <div>
     <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
         @if($budget->isThresholdExceeded())
-        <div class="transition duration-500 bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-2 rounded relative" role="alert" id="thresholdAlert">
+        <div class="transition duration-500 bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-2 rounded relative"
+            role="alert" id="thresholdAlert">
             <strong class="font-bold">Uwaga!</strong>
             <span class="block sm:inline">Przekroczyłeś swój miesięczny próg wydatków.</span>
             <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
@@ -58,12 +59,22 @@
                     <td class="border px-4 py-2">{{ $operation->description }}</td>
                     <td class="border px-4 py-2">
                         @isset($operation->image)
+                        @if (@is_array(getimagesize($operation->image)))
                         <img class="object-scale-down" style="max-width: 300px" src="{{ asset($operation->image) }}">
+                        @else
+                        <a href="{{asset($operation->image)}}" class="flex justify-center">
+                            Pobierz plik <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </a>
+                        @endif
                         @endisset
                     </td>
                     <td class="border px-4 py-2">
                         {{-- <x-jet-button wire:click="editing({{ $operation->id }})" wire:loading.attr="disabled">
-                            {{ __('Edytuj') }}
+                        {{ __('Edytuj') }}
                         </x-jet-button> --}}
                         <x-jet-danger-button wire:click="deleting({{ $operation->id }})" wire:loading.attr="disabled">
                             {{ __('Usuń') }}
@@ -85,5 +96,6 @@
         target.addEventListener('click', () => target.style.opacity = '0');
         target.addEventListener('transitionend', () => target.remove());
     }
+
 </script>
 @endpush

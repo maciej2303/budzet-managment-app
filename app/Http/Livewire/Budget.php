@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Budget as ModelsBudget;
 use App\Models\Category;
 use App\Models\Operation;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -32,7 +33,7 @@ class Budget extends Component
         $this->threshold = $this->budget->threshold;
         return view('livewire.budget.crud', [
             'budget' => $this->budget,
-            'operations' => $this->budget->operations,
+            'operations' => $this->budget->allCategories(),
             'categories' => Category::all(),
         ]);
     }
@@ -60,7 +61,7 @@ class Budget extends Component
 
     public function setThreshold()
     {
-        if($this->threshold == null)
+        if ($this->threshold == null)
             $this->threshold = 0;
         $this->budget->threshold = $this->threshold;
         $this->budget->save();
@@ -79,7 +80,6 @@ class Budget extends Component
         $operation->category_id = $this->category_id;
         $operation->budget_id = auth()->user()->budget->id;
         $operation->user_id = auth()->id();
-
         if ($this->image) {
             $image_path = $this->image->store('/public/images/posts');
             $operation->image = str_replace('public/', 'storage/', $image_path);

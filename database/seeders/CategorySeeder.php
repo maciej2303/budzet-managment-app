@@ -14,10 +14,24 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        $categories = ['Rodzina', 'Zdrowie','Transport','Artykuły spożywcze','Trening','Prezenty','Edukacja','Dom','Elektronika', 'Rachunki','Wypoczynek', 'Inne'];
-        foreach ($categories as $category){
+        $categories = [
+            ['Rodzina', '/images/category-icons/family-icon.png'],
+            ['Zdrowie', '/images/category-icons/health-icon.png'],
+            ['Transport', '/images/category-icons/transport-icon.png'],
+            ['Trening', '/images/category-icons/sport-icon.png'],
+            ['Prezenty', '/images/category-icons/gift-icon.png'],
+            ['Edukacja', '/images/category-icons/education-icon.png'],
+            ['Dom', '/images/category-icons/house-icon.png'],
+            ['Elektronika', '/images/category-icons/electronic-icon.png'],
+            ['Rachunki', '/images/category-icons/billings-icon.png'],
+            ['Wypoczynek', '/images/category-icons/rest-icon.png'],
+            ['Inne', '/images/category-icons/others-icon.png'],
+        ];
+
+        foreach ($categories as $category) {
             DB::table('categories')->insert([
-                'name' => $category,
+                'name' => $category[0],
+                'icon' => $category[1],
                 'default' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
