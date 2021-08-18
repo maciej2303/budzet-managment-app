@@ -31,6 +31,7 @@ class Budget extends Component
     {
         $this->budget = auth()->user()->budget;
         $this->threshold = $this->budget->threshold;
+        $this->dispatchBrowserEvent('contentChanged');
         return view('livewire.budget.crud', [
             'budget' => $this->budget,
             'operations' => $this->budget->allCategories(),
@@ -71,7 +72,6 @@ class Budget extends Component
     public function save()
     {
         $this->validate();
-        dd($this);
         $operation = new Operation();
         if ($this->income == false)
             $this->value = $this->value * -1;
@@ -88,7 +88,7 @@ class Budget extends Component
 
         $operation->save();
         $budget = auth()->user()->budget;
-        $budget->balance += $this->value;
+        $budget->balance += (float)$this->value;
         $budget->save();
         session()->flash('message', 'operation created.');
         $this->creating = false;

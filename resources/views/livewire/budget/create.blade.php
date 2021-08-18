@@ -15,7 +15,7 @@
             </x-slot>
 
             <x-slot name="content">
-                <div class="mt-4">
+                <div class="mt-4" wire:ignore>
                 <x-jet-label for="value" value="{{ __('Kwota') }}" />
                     <x-jet-input type="value" class="mt-1 block w-3/4"
                                 x-ref="value"
@@ -77,3 +77,6 @@
         </x-jet-dialog-modal>
     </div>
 </div>
+@push('js')
+<script src="{{asset('js/budget/datepicker.js')}}"></script>
+@endpush

@@ -28,8 +28,8 @@
         <x-jet-button wire:click="profit" wire:loading.attr="disabled">
             {{ __('Dodaj przychód') }}
         </x-jet-button>
-        <p class="mt-2">Saldo konta: {{$budget->balance}}</p>
-        <p class="mt-2">Próg wydatkow: {{$budget->threshold}}</p>
+        <p class="mt-2">Saldo konta: {{ number_format($budget->balance, 2) }}</p>
+        <p class="mt-2">Próg wydatkow: {{ number_format($budget->threshold, 2) }}</p>
         <x-jet-button wire:click="thresholdModal" wire:loading.attr="disabled">
             {{ __('Ustaw próg wydatków') }}
         </x-jet-button>
