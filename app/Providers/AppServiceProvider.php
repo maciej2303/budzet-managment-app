@@ -24,8 +24,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Blade::if('admin', function () {
-            return auth()->check() && auth()->user()->level == UserLevel::ADMIN;
+        Blade::if('owner', function () {
+            return auth()->check() && auth()->user()->ownedBudget != null;
         });
     }
 }
