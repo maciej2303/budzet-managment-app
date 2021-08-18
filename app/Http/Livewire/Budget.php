@@ -66,6 +66,7 @@ class Budget extends Component
             $this->threshold = 0;
         $this->budget->threshold = $this->threshold;
         $this->budget->save();
+        $this->thresholdModal = false;
     }
 
 

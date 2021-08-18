@@ -15,7 +15,7 @@
             </x-slot>
 
             <x-slot name="content">
-                <div class="mt-4" wire:ignore>
+                <div class="mt-4">
                 <x-jet-label for="value" value="{{ __('Kwota') }}" />
                     <x-jet-input type="value" class="mt-1 block w-3/4"
                                 x-ref="value"
@@ -44,7 +44,7 @@
 
                 <div class="mt-4" >
                 <x-jet-label for="category_id" value="{{ __('Kategoria') }}" />
-                    <select name="" type="category_id" class="mt-1 block w-3/4"
+                    <select name="" type="category_id" class="mt-1 block w-full"
                         x-ref="category_id"
                         wire:model="category_id">
                         @foreach ($categories as $category)

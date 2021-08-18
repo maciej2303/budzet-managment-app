@@ -2,3 +2,7 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+.flatpickr-wrapper,
+.flatpickr-wrapper .datepicker {
+    @apply w-full
+}

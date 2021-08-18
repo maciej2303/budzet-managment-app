@@ -37,6 +37,7 @@
             <thead>
                 <tr>
                     <th class="px-4 py-2">Operacja</th>
+                    <th class="px-4 py-2">Data</th>
                     <th class="px-4 py-2">Wartość</th>
                     <th class="px-4 py-2">Kategoria</th>
                     <th class="px-4 py-2">Opis</th>
@@ -47,6 +48,7 @@
             <tbody>
                 @foreach ($budget->operations as $operation)
                 <tr>
+                    <td class="border px-4 py-2">{{ $operation->created_at->format('d.m.Y') }}</td>
                     <td class="border px-4 py-2">
                         @if ($operation->income)
                         <span class="text-green-600">Przychód</span>

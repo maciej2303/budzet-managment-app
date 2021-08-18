@@ -33374,6 +33374,10 @@ select {
   --tw-backdrop-sepia: sepia(100%);
 }
 
+.flatpickr-wrapper, .flatpickr-wrapper .datepicker {
+  width: 100%;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;
@@ -195823,5 +195827,4 @@ select {
     --tw-backdrop-sepia: sepia(100%);
   }
 }
-
 
