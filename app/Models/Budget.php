@@ -16,21 +16,6 @@ class Budget extends Model
      */
     protected $fillable = ['creator_id'];
 
-    public function owner()
-    {
-        return $this->belongsTo(User::class, 'owner_id');
-    }
-
-    public function operations()
-    {
-        return $this->hasMany(Operation::class);
-    }
-
-    public function categories()
-    {
-        return $this->hasMany(Category::class);
-    }
-
     public function allCategories()
     {
         $defaultCategories = Category::where('default', 1)->get();
@@ -45,5 +30,24 @@ class Budget extends Model
             return true;
 
         return false;
+    }
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    public function operations()
+    {
+        return $this->hasMany(Operation::class);
+    }
+
+    public function members()
+    {
+        return $this->hasMany(User::class);
+    }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
     }
 }

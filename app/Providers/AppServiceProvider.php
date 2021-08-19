@@ -25,7 +25,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Blade::if('owner', function () {
-            return auth()->check() && auth()->user()->ownedBudget != null;
+            
+            return auth()->check() && auth()->user()->ownedBudget;
         });
     }
 }

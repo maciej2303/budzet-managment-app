@@ -11,11 +11,21 @@
 
             <x-slot name="content">
                 <div class="mt-4">
-                <x-jet-label for="invitationLink" value="{{ __('Nazwa') }}" />
-                    <x-jet-input type="invitationLink" class="mt-1 block w-3/4" readonly
-                                x-ref="invitationLink"
-                                wire:model.defer="invitationLink"
+                <x-jet-label for="name" value="{{ __('Nazwa') }}" />
+                    <x-jet-input type="name" class="mt-1 block w-3/4"
+                                x-ref="name"
+                                wire:model.defer="name"
                                 wire:keydown.enter="save" />
+
+                    <x-jet-input-error for="name" class="mt-2" />
+                </div>
+
+                <div class="mt-4" >
+                <x-jet-label for="icon" value="{{ __('Ikona') }}" />
+                    <x-jet-input type="file" class="mt-1 block w-3/4" wire:model.defer="icon"
+                        wire:keydown.enter="save" />
+
+                    <x-jet-input-error for="icon" class="mt-2" />
                 </div>
             </x-slot>
 
