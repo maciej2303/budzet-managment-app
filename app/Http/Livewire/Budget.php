@@ -8,6 +8,7 @@ use App\Models\Operation;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Storage;
 
 class Budget extends Component
 {
@@ -34,7 +35,6 @@ class Budget extends Component
         $this->dispatchBrowserEvent('contentChanged');
         return view('livewire.budget.crud', [
             'budget' => $this->budget,
-            'operations' => $this->budget->allCategories(),
             'categories' => Category::all(),
         ]);
     }
@@ -73,6 +73,7 @@ class Budget extends Component
     public function save()
     {
         $this->validate();
+        $budgetId = auth()->user()->budget->id;
         $operation = new Operation();
         if ($this->income == false)
             $this->value = $this->value * -1;
@@ -80,10 +81,10 @@ class Budget extends Component
         $operation->description = $this->description;
         $operation->income = $this->income;
         $operation->category_id = $this->category_id;
-        $operation->budget_id = auth()->user()->budget->id;
+        $operation->budget_id = $budgetId;
         $operation->user_id = auth()->id();
         if ($this->image) {
-            $image_path = $this->image->store('/public/images/posts');
+            $image_path = $this->image->store('/public/images/budget/' . $budgetId);
             $operation->image = str_replace('public/', 'storage/', $image_path);
         }
 
@@ -105,10 +106,10 @@ class Budget extends Component
     public function destroy()
     {
         $operation = Operation::find($this->selected_id);
+        Storage::delete(str_replace('storage/', 'public/', $operation->image));
         $this->budget->balance -= $operation->value;
         $this->budget->save();
         $operation->delete();
-        //TODO DELETING PHOTOS
 
         $this->selected_id = null;
         $this->deleting = false;
@@ -123,33 +124,4 @@ class Budget extends Component
         $this->income = false;
         $this->category_id = 1;
     }
-
-    // public function editing($id)
-    // {
-    //     $this->editing = true;
-    //     $operation = Operation::find($id);
-    //     $this->selected_id = $id;
-    //     $this->value = $operation->value;
-    //     $this->description = $operation->description;
-    //     $this->income = $operation->income;
-    //     $this->image = $operation->image;
-    //     $this->category_id = $operation->category->id;
-    // }
-
-    // public function update()
-    // {
-    //     $this->validate();
-    //     $operation = Operation::find($this->selected_id);
-    //     if ($this->income == false)
-    //         $this->value = $this->value * -1;
-    //     $operation->value = $this->value;
-    //     $operation->description = $this->description;
-    //     $operation->income = $this->income;
-    //     $operation->category_id = $this->category_id;
-    //     $operation->save();
-
-    //     session()->flash('message', 'operation created.');
-    //     $this->editing = false;
-    //     $this->resetInputs();
-    // }
 }

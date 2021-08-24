@@ -85,7 +85,7 @@ class Categories extends Component
         $category = Category::find($this->selected_id);
         $category->name = $this->name;
         if ($this->icon) {
-
+            Storage::delete(str_replace('storage/', 'public/', $category->icon));
             $image_path = $this->icon->store('/public/images/categories');
             $category->icon  = str_replace('public/', 'storage/', $image_path);
         }
