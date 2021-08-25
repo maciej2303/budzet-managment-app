@@ -34,6 +34,6 @@
             </tbody>
         </table>
     </div>
-    @include('livewire.categories.create')
-    @include('livewire.categories.delete')
+    @include('livewire.members.create')
+    @include('livewire.members.delete')
 </div>

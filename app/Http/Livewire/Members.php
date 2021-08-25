@@ -20,7 +20,7 @@ class Members extends Component
     public function creating()
     {
         $this->creating = true;
-        $this->invitationLink = URL::signedRoute('register', ['budget' => auth()->user()->budget->id]);
+        $this->invitationLink = URL::signedRoute('register.budget', ['budget' => auth()->user()->budget->id], now()->addHours(24));
     }
 
     public function save()

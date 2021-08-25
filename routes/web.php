@@ -30,3 +30,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::view('/categories', 'livewire.categories.show')->name('categories.index');
     Route::view('/members', 'livewire.members.show')->name('members.index');
 });
+
+Route::get('/register/{budget}', [App\Http\Controllers\Auth\RegisterController::class, 'registerToBudgetForm'])->name('register.budget')->middleware('signed');
+Route::post('/register-to-budget/', [App\Http\Controllers\Auth\RegisterController::class, 'registerToBudget'])->name('register.budget.store');

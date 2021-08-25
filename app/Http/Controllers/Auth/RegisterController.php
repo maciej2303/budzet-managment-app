@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Budget;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -76,5 +78,18 @@ class RegisterController extends Controller
         $user->budget_id = $budget->id;
         $user->save();
         return $user;
+    }
+
+    public function registerToBudgetForm($budget)
+    {
+        return view('auth.register-to-budget')->with(['budget' => $budget]);
+    }
+
+    public function registerToBudget(Request $request)
+    {
+        $this->validator($request->all())->validate();
+        event(new Registered($user = User::create($request->all())));
+        $this->guard()->login($user);
+        return redirect($this->redirectPath());
     }
 }

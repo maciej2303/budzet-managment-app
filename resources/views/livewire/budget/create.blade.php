@@ -13,7 +13,6 @@
                     wydatku.
                 @endif
             </x-slot>
-
             <x-slot name="content">
                 <div class="mt-4">
                 <x-jet-label for="value" value="{{ __('Kwota') }}" />
