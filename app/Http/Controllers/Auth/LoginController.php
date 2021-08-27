@@ -50,7 +50,7 @@ class LoginController extends Controller
 
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
-            return redirect()->route('budget.change_budget', [$request->budget_id])
+            return redirect()->route('budget.change_budget_form', [$request->budget_id])
                 ->withSuccess('Signed in');
         }
 

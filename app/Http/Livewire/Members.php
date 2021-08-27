@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Budget;
+use App\Models\User;
 use Illuminate\Support\Facades\URL;
 use Livewire\Component;
 
@@ -49,7 +51,9 @@ class Members extends Component
     public function destroy()
     {
         $user = User::find($this->selected_id);
-        $user->delete();
+        $budget = Budget::create(['creator_id' => $user->id]);
+        $user->budget_id = $budget->id;
+        $user->save();
         $this->deleting = false;
         $this->resetInputs();
     }

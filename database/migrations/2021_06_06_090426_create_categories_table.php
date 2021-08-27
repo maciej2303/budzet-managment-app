@@ -18,9 +18,9 @@ class CreateCategoriesTable extends Migration
             $table->string('name', 200);
             $table->boolean('default')->default(0);
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('budget_id')->nullable();
-            $table->foreign('budget_id')->references('id')->on('budgets');
+            $table->foreign('budget_id')->references('id')->on('budgets')->onDelete('cascade');
             $table->string('icon', 300)->nullable();
             $table->timestamps();
         });

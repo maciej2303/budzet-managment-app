@@ -30,8 +30,8 @@ Route::post('/register-to-budget/', [App\Http\Controllers\Auth\RegisterControlle
 Route::post('/login-to-new-budget', [App\Http\Controllers\Auth\LoginController::class, 'loginToNewBudget'])->name('login.budget_existing_account');
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-    Route::get('/change-budget/{budget}', [App\Http\Controllers\BudgetController::class, 'changeBudgetShow'])->name('budget.change_budget');
-
+    Route::get('/change-budget/{budget}', [App\Http\Controllers\BudgetController::class, 'changeBudgetShow'])->name('budget.change_budget_form');
+    Route::post('/change-budget/{budget}', [App\Http\Controllers\BudgetController::class, 'changeBudget'])->name('budget.change_budget');
     Route::view('/budget', 'livewire.budget.show')->name('budget.index');
     Route::view('/categories', 'livewire.categories.show')->name('categories.index');
     Route::view('/members', 'livewire.members.show')->name('members.index');
