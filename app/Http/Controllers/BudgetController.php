@@ -12,7 +12,7 @@ class BudgetController extends Controller
     public function changeBudgetShow(Budget $budget): View
     {
         $user = auth()->user();
-        $members = collect();
+        $members = null;
         if ($user->ownedBudget && $user->ownedBudget->members()->count() > 1) {
             $members = $user->ownedBudget->members()->where('id', '!=', $user->id)->get();
         }
@@ -22,7 +22,6 @@ class BudgetController extends Controller
     public function changeBudget(Budget $budget, Request $request): RedirectResponse
     {
         $user = auth()->user();
-
         if ($user->ownedBudget && $user->ownedBudget->members()->count() == 1) {
             $ownedBudget = $user->ownedBudget;
             $user->budget_id = $budget->id;

@@ -2,8 +2,10 @@
 
 namespace App\Http\Livewire;
 
+use App\Constants\Frequency;
 use App\Models\Budget as ModelsBudget;
 use App\Models\Category;
+use App\Models\CyclicOperation;
 use App\Models\Operation;
 use Carbon\Carbon;
 use Livewire\Component;
@@ -15,7 +17,7 @@ class Budget extends Component
     use WithFileUploads;
     public $creating, $deleting, $editing = false, $budget, $date;
     public $value, $description, $image, $income, $category_id, $selected_id;
-
+    public $frequencies, $cyclic = false, $frequency;
     public $thresholdModal;
     public $threshold;
 
@@ -26,7 +28,14 @@ class Budget extends Component
         'income' => 'required|boolean',
         'category_id' => 'required',
         'date' => 'required',
+        'frequency' => 'required',
     ];
+
+    public function mount()
+    {
+        $this->frequencies = Frequency::FREQUENCIES;
+        $this->frequency = Frequency::MONTH;
+    }
 
     public function render()
     {
@@ -42,16 +51,16 @@ class Budget extends Component
     public function expense()
     {
         $this->creating = true;
-        $this->date = now()->format('Y-m-d');
         $this->resetInputs();
+        $this->date = today()->format('d-m-Y');
         $this->income = false;
     }
 
     public function profit()
     {
         $this->creating = true;
-        $this->date = now()->format('Y-m-d');
         $this->resetInputs();
+        $this->date = today()->format('d-m-Y');
         $this->income = true;
     }
 
@@ -74,24 +83,47 @@ class Budget extends Component
     {
         $this->validate();
         $budgetId = auth()->user()->budget->id;
-        $operation = new Operation();
-        if ($this->income == false)
-            $this->value = $this->value * -1;
-        $operation->value = $this->value;
-        $operation->description = $this->description;
-        $operation->income = $this->income;
-        $operation->category_id = $this->category_id;
-        $operation->budget_id = $budgetId;
-        $operation->user_id = auth()->id();
-        if ($this->image) {
-            $image_path = $this->image->store('/public/images/budget/' . $budgetId);
-            $operation->image = str_replace('public/', 'storage/', $image_path);
-        }
+        if (!$this->cyclic || Carbon::parse($this->date) == today()) {
+            $operation = new Operation();
+            if ($this->income == false)
+                $this->value = $this->value * -1;
+            $operation->value = $this->value;
+            $operation->description = $this->description;
+            $operation->income = $this->income;
+            $operation->category_id = $this->category_id;
+            $operation->budget_id = $budgetId;
+            $operation->user_id = auth()->id();
 
-        $operation->save();
-        $budget = auth()->user()->budget;
-        $budget->balance += (float)$this->value;
-        $budget->save();
+            if ($this->image) {
+                $image_path = $this->image->store('/public/images/budget/' . $budgetId);
+                $operation->image = str_replace('public/', 'storage/', $image_path);
+            }
+
+            $operation->created_at =  Carbon::parse($this->date);
+            $operation->save();
+
+            $budget = auth()->user()->budget;
+            $budget->balance += (float)$this->value;
+            $budget->save();
+        } else {
+            $cyclicOperation = new CyclicOperation();
+            $cyclicOperation->value = $this->value;
+            $cyclicOperation->description = $this->description;
+            $cyclicOperation->income = $this->income;
+            $cyclicOperation->category_id = $this->category_id;
+            $cyclicOperation->budget_id = $budgetId;
+            $cyclicOperation->user_id = auth()->id();
+
+            if ($this->image) {
+                $image_path = $this->image->store('/public/images/budget/' . $budgetId);
+                $cyclicOperation->image = str_replace('public/', 'storage/', $image_path);
+            }
+
+            $cyclicOperation->cyclic_date = Carbon::parse($this->date);
+            $cyclicOperation->frequency = $this->frequency;
+
+            $cyclicOperation->save();
+        }
         session()->flash('message', 'operation created.');
         $this->creating = false;
         $this->resetInputs();

@@ -2773,13 +2773,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 window.addEventListener('contentChanged', function (event) {
-  console.log('dupa');
   (0,flatpickr__WEBPACK_IMPORTED_MODULE_0__.default)(".datepicker", {
     "locale": flatpickr_dist_l10n_pl_js__WEBPACK_IMPORTED_MODULE_1__.Polish,
     altInput: true,
     altFormat: "F j, Y",
-    dateFormat: "d-m-Y",
-    defultDate: "today",
+    dateFormat: "d-m-YY",
     "static": true
   });
 });

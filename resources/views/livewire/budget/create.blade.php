@@ -51,7 +51,7 @@
                         @endforeach
                     </select>
 
-                    <x-jet-input-error for="description" class="mt-2" />
+                    <x-jet-input-error for="category_id" class="mt-2" />
                 </div>
 
                 <div class="mt-4" >
@@ -61,7 +61,24 @@
 
                     <x-jet-input-error for="image" class="mt-2" />
                 </div>
+                <div class="mt-4">
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" class="form-checkbox" wire:model="cyclic">
+                        <span class="ml-2">Cykliczny</span>
+                    </label>
+                    @if($cyclic)
+                    <x-jet-label for="frequency" value="{{ __('Częstotliwość') }}" />
+                        <select type="frequency" class="mt-1 block w-full"
+                        x-ref="frequency"
+                        wire:model="frequency">
+                            @foreach ($this->frequencies as $key => $frequency)
+                                <option value="{{$frequency}}" {{$frequency == "Co miesiąc" ? 'selected' : ''}}>{{$frequency}}</option>
+                            @endforeach
+                        </select>
 
+                    <x-jet-input-error for="frequency" class="mt-2" />
+                    @endif
+                </div>
             </x-slot>
 
             <x-slot name="footer">
