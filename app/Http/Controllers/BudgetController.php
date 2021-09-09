@@ -31,7 +31,7 @@ class BudgetController extends Controller
             $ownedBudget = $user->ownedBudget;
             $user->budget_id = $budget->id;
             $user->save();
-            $ownedBudget->creator_id = $request->owner_id;
+            $ownedBudget->update(['creator_id' => $request->owner_id]);
         } else {
             $user->budget_id = $budget->id;
             $user->save();

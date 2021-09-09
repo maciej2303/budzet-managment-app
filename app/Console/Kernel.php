@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command((new CyclicOperationController())->cron())->everyMinute();
+        $schedule->command((new CyclicOperationController())->cron())->dailyAt('00:01');
     }
 
     /**

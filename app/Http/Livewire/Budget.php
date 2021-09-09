@@ -105,7 +105,9 @@ class Budget extends Component
             $budget = auth()->user()->budget;
             $budget->balance += (float)$this->value;
             $budget->save();
-        } else {
+        }
+
+        if ($this->cyclic) {
             $cyclicOperation = new CyclicOperation();
             $cyclicOperation->value = $this->value;
             $cyclicOperation->description = $this->description;
@@ -155,5 +157,6 @@ class Budget extends Component
         $this->image = null;
         $this->income = false;
         $this->category_id = 1;
+        $this->cyclic = false;
     }
 }

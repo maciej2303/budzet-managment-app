@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\Frequency;
 use App\Models\CyclicOperation;
 use App\Models\Operation;
 use Carbon\Carbon;
@@ -12,7 +13,7 @@ class CyclicOperationController extends Controller
     public function cron()
     {
         $cyclicOperations = CyclicOperation::where('cyclic_date', today()->format('Y-m-d'))->get();
-        foreach($cyclicOperations as $cyclicOperation) {
+        foreach ($cyclicOperations as $cyclicOperation) {
             $operation = new Operation();
             $operation->value = $cyclicOperation->value;
             $operation->description = $cyclicOperation->description;
@@ -23,6 +24,30 @@ class CyclicOperationController extends Controller
             $operation->image = $cyclicOperation->image;
             $operation->created_at =  Carbon::parse($cyclicOperation->date);
             $operation->save();
+
+            switch ($cyclicOperation->frequency) {
+                case Frequency::DAY:
+                    $cyclicOperation->cyclic_date = Carbon::parse($cyclicOperation->cyclic_date)->addDay();
+                    break;
+
+                case Frequency::WEEK:
+                    $cyclicOperation->cyclic_date = Carbon::parse($cyclicOperation->cyclic_date)->addWeek();
+                    break;
+
+                case Frequency::QUARTER:
+                    $cyclicOperation->cyclic_date = Carbon::parse($cyclicOperation->cyclic_date)->addQuarter();
+                    break;
+
+                case Frequency::YEAR:
+                    $cyclicOperation->cyclic_date = Carbon::parse($cyclicOperation->cyclic_date)->addYear();
+                    break;
+
+                default:
+                    $cyclicOperation->cyclic_date = Carbon::parse($cyclicOperation->cyclic_date)->addMonth();
+                    break;
+            }
+
+            $cyclicOperation->save();
         }
     }
 }
