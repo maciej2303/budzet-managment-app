@@ -2778,7 +2778,7 @@ document.addEventListener('DOMContentLoaded', function () {
     altInput: true,
     altFormat: "F j, Y",
     "static": true,
-    dateFormat: "d-m-Y"
+    dateFormat: "Y-md"
   });
 }, false);
 window.addEventListener('contentChanged', function (event) {

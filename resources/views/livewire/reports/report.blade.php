@@ -32,6 +32,10 @@
                             <x-jet-input-error for="dateTo" class="mt-2" />
                         </div>
                     </div>
+                    <div>
+                        <p class="mt-2">Saldo konta: {{ number_format($budget->balance, 2) }}</p>
+                        {{$this->expenses}} {{$this->incomes}}
+                    </div>
                 </div>
             </div>
         </div>
