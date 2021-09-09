@@ -21,6 +21,9 @@
                     <x-jet-nav-link href="{{ route('categories.index') }}" :active="request()->routeIs('categories.index')">
                         {{ __('Kategorie') }}
                     </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('reports.index') }}" :active="request()->routeIs('reports.index')">
+                        {{ __('Raporty') }}
+                    </x-jet-nav-link>
                     @owner()
                     <x-jet-nav-link href="{{ route('members.index') }}" :active="request()->routeIs('members.index')">
                         {{ __('Członkowie budżetu') }}

@@ -3,7 +3,6 @@
 namespace App\Http\Livewire;
 
 use App\Constants\Frequency;
-use App\Models\Budget as ModelsBudget;
 use App\Models\Category;
 use App\Models\CyclicOperation;
 use App\Models\Operation;

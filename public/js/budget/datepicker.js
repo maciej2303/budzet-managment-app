@@ -2772,12 +2772,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var flatpickr_dist_l10n_pl_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flatpickr_dist_l10n_pl_js__WEBPACK_IMPORTED_MODULE_1__);
 
 
+document.addEventListener('DOMContentLoaded', function () {
+  (0,flatpickr__WEBPACK_IMPORTED_MODULE_0__.default)(".datepickerReport", {
+    "locale": flatpickr_dist_l10n_pl_js__WEBPACK_IMPORTED_MODULE_1__.Polish,
+    altInput: true,
+    altFormat: "F j, Y",
+    "static": true,
+    dateFormat: "d-m-Y"
+  });
+}, false);
 window.addEventListener('contentChanged', function (event) {
   (0,flatpickr__WEBPACK_IMPORTED_MODULE_0__.default)(".datepicker", {
     "locale": flatpickr_dist_l10n_pl_js__WEBPACK_IMPORTED_MODULE_1__.Polish,
     altInput: true,
     altFormat: "F j, Y",
-    dateFormat: "d-m-YY",
     "static": true
   });
 });

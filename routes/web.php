@@ -35,4 +35,5 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::view('/budget', 'livewire.budget.show')->name('budget.index');
     Route::view('/categories', 'livewire.categories.show')->name('categories.index');
     Route::view('/members', 'livewire.members.show')->name('members.index');
+    Route::view('/reports', 'livewire.reports.show')->name('reports.index');
 });

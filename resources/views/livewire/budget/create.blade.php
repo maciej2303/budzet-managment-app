@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="mt-4">
-                <x-jet-label for="date" value="{{ __('Data') }}" />
+                    <x-jet-label for="date" value="{{ __('Data') }}" />
                     <input class="datepicker" wire:model="date" id="date"/>
 
                     <x-jet-input-error for="date" class="mt-2" />
