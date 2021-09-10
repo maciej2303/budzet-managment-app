@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function(){
         altInput: true,
         altFormat: "F j, Y",
         static: true,
-        dateFormat: "Y-md",
+        dateFormat: "Y-m-d",
     });
 }, false);
 
@@ -18,5 +18,6 @@ window.addEventListener('contentChanged', event => {
         altInput: true,
         altFormat: "F j, Y",
         static: true,
+        dateFormat: "Y-m-d",
     });
 });

@@ -51,7 +51,7 @@ class Budget extends Component
     {
         $this->creating = true;
         $this->resetInputs();
-        $this->date = today()->format('d-m-Y');
+        $this->date = today()->format('Y-m-d');
         $this->income = false;
     }
 
@@ -59,7 +59,7 @@ class Budget extends Component
     {
         $this->creating = true;
         $this->resetInputs();
-        $this->date = today()->format('d-m-Y');
+        $this->date = today()->format('Y-m-d');
         $this->income = true;
     }
 

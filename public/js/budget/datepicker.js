@@ -2778,7 +2778,7 @@ document.addEventListener('DOMContentLoaded', function () {
     altInput: true,
     altFormat: "F j, Y",
     "static": true,
-    dateFormat: "Y-md"
+    dateFormat: "Y-m-d"
   });
 }, false);
 window.addEventListener('contentChanged', function (event) {
@@ -2786,7 +2786,8 @@ window.addEventListener('contentChanged', function (event) {
     "locale": flatpickr_dist_l10n_pl_js__WEBPACK_IMPORTED_MODULE_1__.Polish,
     altInput: true,
     altFormat: "F j, Y",
-    "static": true
+    "static": true,
+    dateFormat: "Y-m-d"
   });
 });
 })();
