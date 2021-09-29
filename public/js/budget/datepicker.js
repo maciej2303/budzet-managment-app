@@ -2782,7 +2782,8 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 }, false);
 window.addEventListener('contentChanged', function (event) {
-  (0,flatpickr__WEBPACK_IMPORTED_MODULE_0__.default)(".datepicker", {
+  console.log('dupa');
+  (0,flatpickr__WEBPACK_IMPORTED_MODULE_0__.default)(".datepicker, .datepickerReport", {
     "locale": flatpickr_dist_l10n_pl_js__WEBPACK_IMPORTED_MODULE_1__.Polish,
     altInput: true,
     altFormat: "F j, Y",

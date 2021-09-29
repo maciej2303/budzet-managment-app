@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 window.addEventListener('contentChanged', event => {
-    flatpickr(".datepicker", {
+    console.log('dupa');
+    flatpickr(".datepicker, .datepickerReport", {
         "locale": Polish,
         altInput: true,
         altFormat: "F j, Y",

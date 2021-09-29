@@ -22,9 +22,15 @@ class Report extends Component
 
     public function render()
     {
-        $this->operations = $this->budget->operations()->whereBetween('created_at', [$this->dateFrom, $this->dateTo])->get();
+        $operations = $this->budget->operations()->whereBetween('created_at', [$this->dateFrom, $this->dateTo]);
+        if($this->category != -1)
+            $operations = $operations->whereHas('category', function ($query) {
+                return $query->where('id', $this->category);
+            });
+        $this->operations = $operations->get();
         $this->expenses = $this->operations->where('income', false)->sum('value');
         $this->incomes = $this->operations->where('income', true)->sum('value');
+        $this->dispatchBrowserEvent('contentChanged');
         return view('livewire.reports.report');
     }
 }

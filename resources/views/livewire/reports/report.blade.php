@@ -12,7 +12,7 @@
                     <div class="w-full flex">
                         <x-jet-input type="text" class="w-full sm:w-1/3 my-4 mr-2" name="search" wire:model='search'
                             placeholder="Szukaj" />
-                        <select name="category" type="category" class="form-select block w-full sm:w-1/3 my-4"
+                        <select name="category" type="category" class="form-select shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full sm:w-1/3 my-4 mr-2"
                             x-ref="category" wire:model="category">
                             <option value="-1">Wybierz kategorię</option>
                             @foreach ($categories as $category)
@@ -20,14 +20,12 @@
                             @endforeach
                         </select>
                         <div class="mt-4">
-                            <x-jet-label for="dateFrom" value="{{ __('Od') }}" />
-                            <input class="datepickerReport" wire:model="dateFrom" id="dateFrom" />
+                            <input class="datepickerReport shadow border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2" wire:model="dateFrom" id="dateFrom" />
 
                             <x-jet-input-error for="dateFrom" class="mt-2" />
                         </div>
                         <div class="mt-4">
-                            <x-jet-label for="dateTo" value="{{ __('Do') }}" />
-                            <input class="datepickerReport" wire:model="dateTo" id="dateTo" />
+                            <input class="datepickerReport shadow border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" wire:model="dateTo" id="dateTo" />
 
                             <x-jet-input-error for="dateTo" class="mt-2" />
                         </div>
