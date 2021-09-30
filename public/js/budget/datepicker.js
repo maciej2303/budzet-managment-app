@@ -31,7 +31,7 @@ const DEBOUNCED_CHANGE_MS = 300;
 function FlatpickrInstance(element, instanceConfig) {
     const self = {
         config: Object.assign(Object.assign({}, _types_options__WEBPACK_IMPORTED_MODULE_0__.defaults), flatpickr.defaultConfig),
-        l10n: _l10n_default__WEBPACK_IMPORTED_MODULE_1__.default,
+        l10n: _l10n_default__WEBPACK_IMPORTED_MODULE_1__["default"],
     };
     self.parseDate = (0,_utils_dates__WEBPACK_IMPORTED_MODULE_4__.createDateParser)({ config: self.config, l10n: self.l10n });
     self._handlers = [];
@@ -1972,8 +1972,8 @@ var flatpickr = function (selector, config) {
 };
 flatpickr.defaultConfig = {};
 flatpickr.l10ns = {
-    en: Object.assign({}, _l10n_default__WEBPACK_IMPORTED_MODULE_1__.default),
-    default: Object.assign({}, _l10n_default__WEBPACK_IMPORTED_MODULE_1__.default),
+    en: Object.assign({}, _l10n_default__WEBPACK_IMPORTED_MODULE_1__["default"]),
+    default: Object.assign({}, _l10n_default__WEBPACK_IMPORTED_MODULE_1__["default"]),
 };
 flatpickr.localize = (l10n) => {
     flatpickr.l10ns.default = Object.assign(Object.assign({}, flatpickr.l10ns.default), l10n);
@@ -2773,7 +2773,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 document.addEventListener('DOMContentLoaded', function () {
-  (0,flatpickr__WEBPACK_IMPORTED_MODULE_0__.default)(".datepickerReport", {
+  (0,flatpickr__WEBPACK_IMPORTED_MODULE_0__["default"])(".datepickerReport", {
     "locale": flatpickr_dist_l10n_pl_js__WEBPACK_IMPORTED_MODULE_1__.Polish,
     altInput: true,
     altFormat: "F j, Y",
@@ -2783,7 +2783,7 @@ document.addEventListener('DOMContentLoaded', function () {
 }, false);
 window.addEventListener('contentChanged', function (event) {
   console.log('dupa');
-  (0,flatpickr__WEBPACK_IMPORTED_MODULE_0__.default)(".datepicker, .datepickerReport", {
+  (0,flatpickr__WEBPACK_IMPORTED_MODULE_0__["default"])(".datepicker, .datepickerReport", {
     "locale": flatpickr_dist_l10n_pl_js__WEBPACK_IMPORTED_MODULE_1__.Polish,
     altInput: true,
     altFormat: "F j, Y",
