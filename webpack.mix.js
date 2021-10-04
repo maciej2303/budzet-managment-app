@@ -13,6 +13,7 @@ const mix = require('laravel-mix');
 
 mix.js('resources/js/app.js', 'public/js')
     .js('resources/js/budget/datepicker.js', 'public/js/budget/datepicker.js')
+    .js('resources/js/reports/chart.js', 'public/js/reports/chart.js')
     .postCss('resources/css/app.css', 'public/css', [
         require('postcss-import'),
         require('tailwindcss'),

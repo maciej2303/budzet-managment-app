@@ -2772,7 +2772,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var flatpickr_dist_l10n_pl_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flatpickr_dist_l10n_pl_js__WEBPACK_IMPORTED_MODULE_1__);
 
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('livewire:load', function () {
   (0,flatpickr__WEBPACK_IMPORTED_MODULE_0__["default"])(".datepickerReport", {
     "locale": flatpickr_dist_l10n_pl_js__WEBPACK_IMPORTED_MODULE_1__.Polish,
     altInput: true,
@@ -2780,9 +2780,9 @@ document.addEventListener('DOMContentLoaded', function () {
     "static": true,
     dateFormat: "Y-m-d"
   });
-}, false);
+});
 window.addEventListener('contentChanged', function (event) {
-  console.log('dupa');
+  console.log('contentChanged');
   (0,flatpickr__WEBPACK_IMPORTED_MODULE_0__["default"])(".datepicker, .datepickerReport", {
     "locale": flatpickr_dist_l10n_pl_js__WEBPACK_IMPORTED_MODULE_1__.Polish,
     altInput: true,
