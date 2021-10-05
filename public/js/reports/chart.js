@@ -13363,7 +13363,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ctx = document.getElementById('myChart').getContext('2d');
 var myChart = new chart_js_auto__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, {
-  type: 'bar',
+  type: 'line',
   data: {
     labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
     datasets: [{

@@ -38,8 +38,18 @@
                 </div>
                 <div class="mt-2">
                     <p>Saldo konta: {{ number_format($budget->balance, 2) }}</p>
-                    <span>Przychód: <span class="text-green-500">{{ number_format($incomes, 2) }}</span></span>
-                    <span>Wydatki: <span class="text-red-500">{{ number_format($expenses, 2) }}</span></span>
+                    <span class="flex">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                          </svg>
+                        Przychód:
+                        <span class="text-green-500 ml-2">{{ number_format($incomes, 2) }} zł</span></span>
+                    <span class="flex">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 13l-5 5m0 0l-5-5m5 5V6" />
+                        </svg> Wydatki: <span class="text-red-500 ml-2">{{ number_format($expenses, 2) }} zł</span></span>
                 </div>
                 <div class="block">
                     @foreach ($operations as $operation)
