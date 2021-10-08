@@ -1,11 +1,11 @@
 import Chart from 'chart.js/auto';
 var ctx = document.getElementById('myChart').getContext('2d');
 var myChart = new Chart(ctx, {
-    type: 'line',
+    type: 'bar',
     data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: ['1', '5' ,'8' ,'11', '14', '18' , '25', '31'],
         datasets: [{
-            data: [5, 4, 4, 3, 4, 2, 1, 2, 3, 4, 3, 2, 2, 2, 3],
+            data: [1,2,2,2,126,2,2,2],
             fill: "start",
             backgroundColor: "rgba(22, 197, 104,.3)",
             borderColor: "#16C568",
