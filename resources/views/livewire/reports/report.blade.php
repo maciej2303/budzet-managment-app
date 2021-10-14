@@ -6,7 +6,7 @@
 
 <div class="sm:py-12">
     <div name='content' class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden sm:shadow-md sm:rounded border border-gray-light">
+        <div class="bg-white sm:shadow-md sm:rounded border border-gray-light">
             <div class="mx-auto p-4 lg:p-12 rounded-2xl">
                 <div class="flex items-center flex-wrap">
                     <div class="w-full flex">

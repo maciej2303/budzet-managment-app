@@ -2,7 +2,6 @@
     <div name="content">
         <div class="mt-5">
         </div>
-
         <!--Confirmation Modal -->
         <x-jet-dialog-modal wire:model="creating">
             <x-slot name="title">

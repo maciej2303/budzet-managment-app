@@ -50,4 +50,9 @@ class Budget extends Model
     {
         return $this->hasMany(Category::class);
     }
+
+    public function cyclicOperations()
+    {
+        return $this->hasMany(CyclicOperation::class);
+    }
 }
