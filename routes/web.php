@@ -33,6 +33,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/change-budget/{budget}', [App\Http\Controllers\BudgetController::class, 'changeBudgetShow'])->name('budget.change_budget_form');
     Route::post('/change-budget/{budget}', [App\Http\Controllers\BudgetController::class, 'changeBudget'])->name('budget.change_budget');
     Route::view('/budget', 'livewire.budget.show')->name('budget.index');
+    Route::view('/cyclic-operations', 'livewire.cyclic-operations.show')->name('cyclic_operations.index');
     Route::view('/categories', 'livewire.categories.show')->name('categories.index');
     Route::view('/members', 'livewire.members.show')->name('members.index');
     Route::view('/reports', 'livewire.reports.show')->name('reports.index');

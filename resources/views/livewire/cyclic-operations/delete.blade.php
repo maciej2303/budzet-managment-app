@@ -3,7 +3,7 @@
         <!-- Delete User Confirmation Modal -->
         <x-jet-dialog-modal wire:model="deleting">
             <x-slot name="title">
-                {{ __('Usuń operację') }}
+                {{ __('Usuń operację cykliczną') }}
             </x-slot>
 
             <x-slot name="content">

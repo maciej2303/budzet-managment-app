@@ -32,6 +32,16 @@
                 </x-jet-button>
                 <p class="mt-2">Saldo konta: {{ number_format($budget->balance, 2) }}</p>
                 <p class="mt-2">Próg wydatkow: {{ number_format($budget->threshold, 2) }}</p>
+                @if($budget->threshold > 0)
+                <div class="relative pt-1">
+                    <div class="overflow-hidden h-2 text-xs flex rounded bg-red-200">
+                        <div style="width:{{$budget->currentMonthExpensesPercentage()}}%"
+                            class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500">
+                        </div>
+                    </div>
+                    Wydano: {{number_format(abs($budget->currentMonthExpenses()),2)}} / {{number_format($budget->threshold, 2)}}
+                </div>
+                @endif
                 <x-jet-button wire:click="thresholdModal" wire:loading.attr="disabled">
                     {{ __('Ustaw próg wydatków') }}
                 </x-jet-button>

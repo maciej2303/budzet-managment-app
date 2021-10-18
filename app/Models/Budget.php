@@ -24,13 +24,24 @@ class Budget extends Model
 
     public function isThresholdExceeded()
     {
-        $expenses = $this->operations()->whereMonth('created_at', '=', now()->month)->where('income', false)->get()->sum('value');
-
-        if ($this->threshold > 0 && $this->threshold + $expenses < 0)
+        if ($this->threshold > 0 && $this->threshold + $this->currentMonthExpenses() < 0)
             return true;
 
         return false;
     }
+
+    public function currentMonthExpenses()
+    {
+        $expenses = $this->operations()->whereMonth('created_at', '=', now()->month)->where('income', false)->get()->sum('value');
+
+        return $expenses;
+    }
+
+    public function currentMonthExpensesPercentage()
+    {
+        return round(abs(($this->threshold / $this->currentMonthExpenses())), 2);
+    }
+
     public function owner()
     {
         return $this->belongsTo(User::class, 'creator_id');
