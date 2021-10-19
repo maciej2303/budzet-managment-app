@@ -71,7 +71,12 @@
                         </div>
                     </div>
                     <div class="w-full md:w-2/3">
-                        <canvas id="myChart" width="400" height="400"></canvas>
+                        {{-- <canvas id="myChart" width="400" height="400"></canvas> --}}
+                        <div style="height: 600px !important;">
+                            <livewire:livewire-column-chart
+                                :column-chart-model="$chart"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

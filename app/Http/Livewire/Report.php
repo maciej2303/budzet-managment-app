@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use Asantibanez\LivewireCharts\Models\ColumnChartModel;
 use Livewire\Component;
 
 class Report extends Component
@@ -44,6 +45,12 @@ class Report extends Component
         $this->expenses = $this->operations->where('income', false)->sum('value');
         $this->incomes = $this->operations->where('income', true)->sum('value');
         $this->dispatchBrowserEvent('contentChanged');
-        return view('livewire.reports.report');
+        $chart =  (new ColumnChartModel())
+            ->setTitle('Expenses by Type')
+            ->addColumn('Food', 100, '#f6ad55')
+            ->addColumn('Shopping', 200, '#fc8181')
+            ->addColumn('Travel', 300, '#90cdf4');
+
+        return view('livewire.reports.report',  ['chart' => $chart]);
     }
 }

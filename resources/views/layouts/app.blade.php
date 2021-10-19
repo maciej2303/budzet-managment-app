@@ -43,5 +43,7 @@
         @stack('modals')
         @stack('js')
         @livewireScripts
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+        @livewireChartsScripts
     </body>
 </html>
