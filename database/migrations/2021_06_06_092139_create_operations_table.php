@@ -16,6 +16,7 @@ class CreateOperationsTable extends Migration
         Schema::create('operations', function (Blueprint $table) {
             $table->id();
             $table->decimal('value', 19, 2);
+            $table->decimal('balance_before', 19, 2)->default(0);
             $table->text('description')->nullable();
             $table->string('image', 300)->nullable();
             $table->boolean('income');
