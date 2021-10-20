@@ -17,22 +17,25 @@ class OperationSeeder extends Seeder
     public function run()
     {
         $balance = 0;
-        for ($i = 0; $i < 20; $i++) {
-            $value = (rand(0, 2000) - 1000);
-            $income = $value > 0 ? 1 : 0;
-            DB::table('operations')->insert([
-                'value' => $value,
-                'balance_before' => $balance,
-                'description' => 'test',
-                'income' => $income,
-                'user_id' => '1',
-                'category_id' => rand(1, Category::get()->count()),
-                'budget_id' => '1',
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
+        for ($j = 50; $j > 0; $j--) {
+            for ($i = 0; $i < 10; $i++) {
 
-            $balance += $value;
+                $value = (rand(0, 1000) - 500);
+                $income = $value > 0 ? 1 : 0;
+                DB::table('operations')->insert([
+                    'value' => $value,
+                    'balance_before' => $balance,
+                    'description' => 'test',
+                    'income' => $income,
+                    'user_id' => '1',
+                    'category_id' => rand(1, Category::get()->count()),
+                    'budget_id' => '1',
+                    'created_at' => now()->subDay($j),
+                    'updated_at' => now()->subDay($j),
+                ]);
+
+                $balance += $value;
+            }
         }
         $budget = Budget::first();
         $budget->balance = $balance;

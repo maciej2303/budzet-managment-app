@@ -74,6 +74,7 @@
                         {{-- <canvas id="myChart" width="400" height="400"></canvas> --}}
                         <div style="height: 600px !important;">
                             <livewire:livewire-line-chart
+                             key="{{ $chart->reactiveKey() }}"
                                 :line-chart-model="$chart"
                             />
                         </div>
