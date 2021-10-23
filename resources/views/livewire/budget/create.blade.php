@@ -14,6 +14,16 @@
             </x-slot>
             <x-slot name="content">
                 <div class="mt-4">
+                <x-jet-label for="name" value="{{ __('Nazwa') }}" />
+                    <x-jet-input type="name" class="mt-1 block w-3/4"
+                                x-ref="name"
+                                wire:model.defer="name"
+                                wire:keydown.enter="save" />
+
+                    <x-jet-input-error for="name" class="mt-2" />
+                </div>
+
+                <div class="mt-4">
                 <x-jet-label for="value" value="{{ __('Kwota') }}" />
                     <x-jet-input type="value" class="mt-1 block w-3/4"
                                 x-ref="value"

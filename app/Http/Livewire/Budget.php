@@ -15,12 +15,13 @@ class Budget extends Component
 {
     use WithFileUploads;
     public $creating, $deleting, $editing = false, $budget, $date;
-    public $value, $description, $image, $income, $category_id, $selected_id;
+    public $name, $value, $description, $image, $income, $category_id, $selected_id;
     public $frequencies, $cyclic = false, $frequency;
     public $thresholdModal;
     public $threshold;
 
     protected $rules = [
+        'name' => 'required|string|max:200',
         'value' => 'required|regex:/^\d+(\.\d{1,2})?$/',
         'description' => 'nullable|string',
         'image' => 'nullable|file',
@@ -84,6 +85,7 @@ class Budget extends Component
         $budgetId = auth()->user()->budget->id;
         if (!$this->cyclic || Carbon::parse($this->date) == today()) {
             $operation = new Operation();
+            $operation->name = $this->name;
             if ($this->income == false)
                 $this->value = $this->value * -1;
             $operation->value = $this->value;
@@ -108,6 +110,7 @@ class Budget extends Component
 
         if ($this->cyclic) {
             $cyclicOperation = new CyclicOperation();
+            $cyclicOperation->name = $this->name;
             $cyclicOperation->value = $this->value;
             $cyclicOperation->description = $this->description;
             $cyclicOperation->income = $this->income;
@@ -151,6 +154,7 @@ class Budget extends Component
 
     private function resetInputs()
     {
+        $this->name = '';
         $this->value = '';
         $this->description = '';
         $this->image = null;

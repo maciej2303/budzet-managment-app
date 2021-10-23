@@ -15,6 +15,7 @@ class CreateCyclicOperationsTable extends Migration
     {
         Schema::create('cyclic_operations', function (Blueprint $table) {
             $table->id();
+            $table->string('name', 200)->default('Operacja');
             $table->decimal('value', 19, 2);
             $table->text('description')->nullable();
             $table->string('image', 300)->nullable();

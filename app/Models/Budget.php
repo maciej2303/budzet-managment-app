@@ -37,6 +37,13 @@ class Budget extends Model
         return $expenses;
     }
 
+    public function currentMonthIncomes()
+    {
+        $expenses = $this->operations()->whereMonth('created_at', '=', now()->month)->where('income', true)->get()->sum('value');
+
+        return $expenses;
+    }
+
     public function currentMonthExpensesPercentage()
     {
         return round(abs(($this->threshold / $this->currentMonthExpenses())), 2);

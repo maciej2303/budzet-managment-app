@@ -9,6 +9,7 @@
         <div class="bg-white sm:shadow-md sm:rounded border border-gray-light">
             <div class="mx-auto p-4 lg:p-12 rounded-2xl">
                 <div class="flex items-center flex-wrap">
+
                     <div class="w-full flex">
                         <x-jet-input type="text" class="w-full sm:w-1/3 my-4 mr-2" name="search" wire:model='search'
                             placeholder="Szukaj" />
@@ -47,14 +48,16 @@
                                         d="M7 11l5-5m0 0l5 5m-5-5v12" />
                                 </svg>
                                 Przychód:
-                                <span class="text-green-500 ml-2">{{ number_format($incomes, 2) }} zł</span></span>
+                                <span class="text-green-500 ml-2">{{ number_format($budget->currentMonthIncomes, 2) }} zł</span>
+                            </span>
                             <span class="flex">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M17 13l-5 5m0 0l-5-5m5 5V6" />
                                 </svg> Wydatki: <span class="text-red-500 ml-2">{{ number_format($expenses, 2) }}
-                                    zł</span></span>
+                                    zł</span>
+                                </span>
                         </div>
                         <div class="block">
                             @foreach ($categories as $category)
@@ -69,14 +72,13 @@
                             @endif
                             @endforeach
                         </div>
+
                     </div>
                     <div class="w-full md:w-2/3">
                         {{-- <canvas id="myChart" width="400" height="400"></canvas> --}}
                         <div style="height: 600px !important;">
-                            <livewire:livewire-line-chart
-                             key="{{ $chart->reactiveKey() }}"
-                                :line-chart-model="$chart"
-                            />
+                            <livewire:livewire-line-chart key="{{ $chart->reactiveKey() }}"
+                                :line-chart-model="$chart" />
                         </div>
                     </div>
                 </div>
