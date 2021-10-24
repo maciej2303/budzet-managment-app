@@ -8,37 +8,13 @@
     <div name='content' class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden sm:shadow-md sm:rounded border border-gray-light">
             <div class="mx-auto p-4 lg:p-12 rounded-2xl">
-                @if($budget->threshold > 0)
-                <div class="relative pt-1">
-                    <div class="overflow-hidden h-2 text-xs flex rounded bg-red-200">
-                        <div style="width:{{$budget->currentMonthExpensesPercentage()}}%"
-                            class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500">
-                        </div>
-                    </div>
-                    Wydano: {{number_format(abs($budget->currentMonthExpenses()),2)}} /
-                    {{number_format($budget->threshold, 2)}}
-                </div>
-                @endif
-                <x-jet-button wire:click="thresholdModal" wire:loading.attr="disabled">
-                    {{ __('Ustaw miesięczny  próg wydatków') }}
-                </x-jet-button>
                 <div class="grid grid-cols-1 lg:grid-cols-3 p-4 gap-4">
                     <div
                         class="relative flex flex-col min-w-0 mb-4 lg:mb-0 break-words bg-gray-50 dark:bg-gray-800 w-full shadow-lg rounded lg:col-span-2">
                         <div class="rounded-t mb-0 px-0 border-0">
-                            <div class="flex flex-wrap items-center px-4 py-2">
-                                <div class="relative w-full max-w-full">
-                                    <h3 class="font-semibold text-gray-900 dark:text-gray-50 text-lg inline">Budżet</h3>
-
-                                    <x-jet-button wire:click="expense" wire:loading.attr="disabled">
-                                        {{ __('Dodaj wydatek') }}
-                                    </x-jet-button>
-                                    <x-jet-button wire:click="profit" wire:loading.attr="disabled">
-                                        {{ __('Dodaj przychód') }}
-                                    </x-jet-button>
-                                </div>
-                            </div>
-                            <div class="block w-full overflow-x-auto">
+                            <div class="px-4 py-2">
+                                <h3 class="font-semibold text-gray-900 dark:text-gray-50 text-lg inline">Budżet</h3>
+                                
                                 <table class="items-center w-full bg-transparent border-collapse">
                                     <thead>
                                         <tr>
@@ -76,12 +52,26 @@
                                         </tr>
                                     </thead>
                                 </table>
+                            </div>
+                            <div class="px-4 py-2">
+                                <div class="relative w-full max-w-full">
+                                    <h3 class="font-semibold text-gray-900 dark:text-gray-50 text-lg inline">Ostatnie
+                                        transakcje</h3>
+                                    <svg wire:click="operation" wire:loading.attr="disabled"
+                                        xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline m-4 cursor-pointer"
+                                        style="float: right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="block w-full overflow-x-auto">
                                 <table class="items-center w-full bg-transparent border-collapse">
                                     <tbody>
-                                        @foreach ($budget->operations()->orderByDesc('created_at')->get(); as
-                                        $operation)
+                                        @foreach ($operations as $operation)
 
-                                        <tr class="text-gray-700 dark:text-gray-100 hover:bg-gray-300" wire:click="showOperation({{$operation}})" wire:loading.attr="disabled">
+                                        <tr class="text-gray-700 dark:text-gray-100 hover:bg-gray-300"
+                                            wire:click="showOperation({{$operation}})" wire:loading.attr="disabled">
                                             <th colspan="2"
                                                 class="w-full border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex flex-row flex-wrap">
                                                 <img class="w-16 h-auto self-center"
@@ -110,6 +100,32 @@
                     </div>
                     <div
                         class="relative flex flex-col min-w-0 mb-4 lg:mb-0 break-words bg-gray-50 dark:bg-gray-800 w-full shadow-lg rounded">
+
+                        {{-- Próg wydatków --}}
+                        <div class="rounded-t mb-0 p-2 border-0">
+                            <div class="flex justify-center align-center pb-4">
+                                <x-jet-button wire:click="thresholdModal" wire:loading.attr="disabled"
+                                    style="width: 250px">
+                                    {{ __('Ustaw miesięczny  próg wydatków') }}
+                                </x-jet-button>
+                            </div>
+                            <div class="relative pt-1">
+                                @if($budget->threshold > 0)
+                                <div class="overflow-hidden h-2 text-xs flex rounded bg-red-200 text-center w-full">
+                                    <div style="width:{{$budget->currentMonthExpensesPercentage()}}%"
+                                        class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500">
+                                    </div>
+                                </div>
+                                Wydano: {{number_format(abs($budget->currentMonthExpenses()),2)}} /
+                                {{number_format($budget->threshold, 2)}}
+                                @endif
+                            </div>
+
+
+                        </div>
+                        {{-- Próg wydatków --}}
+
+                        {{-- Miesięczne statystyki --}}
                         <div class="rounded-t mb-0 px-0 border-0">
                             <div class="flex flex-wrap items-center px-4 py-2">
                                 <div class="relative w-full max-w-full flex-grow flex-1">
@@ -124,6 +140,9 @@
                                 </div>
                             </div>
                         </div>
+                        {{-- Miesięczne statystyki --}}
+
+                        {{-- Wydatki na kategorię --}}
 
                         <div class="rounded-t mb-0 px-0 border-0">
                             <div class="flex flex-wrap items-center px-4 py-2">
@@ -168,6 +187,7 @@
                                 </table>
                             </div>
                         </div>
+                        {{-- Wydatki na kategorię --}}
                     </div>
                 </div>
             </div>

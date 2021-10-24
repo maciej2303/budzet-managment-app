@@ -53,7 +53,7 @@ class Budget extends Model
 
     public function currentMonthExpensesPercentage()
     {
-        return round(abs(($this->threshold / $this->currentMonthExpenses())), 2);
+        return round(abs(($this->currentMonthExpenses() / $this->threshold * 100)), 2);
     }
 
     public function owner()

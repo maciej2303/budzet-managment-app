@@ -5,14 +5,18 @@
         <!--Confirmation Modal -->
         <x-jet-dialog-modal wire:model="creating">
             <x-slot name="title">
-                Dodawanie
-                @if ($income)
-                    przychodu.
-                @else
-                    wydatku.
-                @endif
+                Dodawanie operacji
             </x-slot>
             <x-slot name="content">
+                <div class="mt-4 w-full">
+                <select name="income" type="income"
+                            class="form-select shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            x-ref="income" wire:model="income">
+                            <option value="0">Wydatek</option>
+                            <option value="1">Przychód</option>
+                        </select>
+                </div>
+
                 <div class="mt-4">
                 <x-jet-label for="name" value="{{ __('Nazwa') }}" />
                     <x-jet-input type="name" class="mt-1 block w-3/4"

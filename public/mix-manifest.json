@@ -1,6 +1,6 @@
 {
-    "/js/app.js": "/js/app.js",
-    "/js/budget/datepicker.js": "/js/budget/datepicker.js",
-    "/js/reports/chart.js": "/js/reports/chart.js",
-    "/css/app.css": "/css/app.css"
+    "/js/app.js": "/js/app.js?id=87478c28df537c7591fb",
+    "/js/budget/datepicker.js": "/js/budget/datepicker.js?id=0d208dd54ed9e42f0d2d",
+    "/js/reports/chart.js": "/js/reports/chart.js?id=1de26ac71176ce24e8eb",
+    "/css/app.css": "/css/app.css?id=ebaae5721fef0af6bf89"
 }

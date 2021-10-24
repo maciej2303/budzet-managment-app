@@ -21,7 +21,8 @@ class Budget extends Component
     public $categories, $categoryExpenses;
     public $thresholdModal;
     public $threshold;
-    public $showOperation, $operation;
+    public $showOperation, $operation, $operations;
+    public $month, $year;
 
     protected $rules = [
         'name' => 'required|string|max:200',
@@ -38,14 +39,16 @@ class Budget extends Component
     {
         $this->frequencies = Frequency::FREQUENCIES;
         $this->frequency = Frequency::MONTH;
-        $this->budget = auth()->user()->budget()->with('operations', 'members')->first();
+        $this->budget = auth()->user()->budget()->first();
         $this->categories = $this->budget->allCategories();
+        $this->categoryExpenses = $this->categories;
+        $this->month = today()->month;
+        $this->year = today()->year;
     }
 
     public function render()
     {
-        $this->categoryExpenses = $this->categories;
-        $this->operations = $this->budget->currentMonthOperations();
+        $this->operations = $this->budget->operations()->whereMonth('created_at', '=', $this->month)->whereYear('created_at', '=', $this->year)->get();
 
         foreach ($this->categoryExpenses as $category) {
             $category->sum = 0;
@@ -56,11 +59,9 @@ class Budget extends Component
             }
             $category->percentOfAllExpenses = round(abs(($category->expenses / $this->budget->currentMonthExpenses() * 100)), 2);
         }
-
         $this->categoryExpenses = $this->categoryExpenses->sortByDesc('expenses');
-
-        $chart = BudgetService::generateBalanceChartForLastThirtyDays($this->budget);
-
+        $chart = BudgetService::generateBalanceChartFromOperations($this->year, $this->month, clone $this->operations);
+        $this->operations = $this->operations->sortByDesc('created_at');
         $this->dispatchBrowserEvent('contentChanged');
         return view('livewire.budget.crud', [
             'budget' => $this->budget,
@@ -68,7 +69,7 @@ class Budget extends Component
         ]);
     }
 
-    public function expense()
+    public function operation()
     {
         $this->creating = true;
         $this->resetInputs();
@@ -76,13 +77,6 @@ class Budget extends Component
         $this->income = false;
     }
 
-    public function profit()
-    {
-        $this->creating = true;
-        $this->resetInputs();
-        $this->date = today()->format('Y-m-d');
-        $this->income = true;
-    }
 
     public function showOperation($operation)
     {
@@ -131,6 +125,7 @@ class Budget extends Component
 
             $budget = auth()->user()->budget;
             $budget->balance += (float)$this->value;
+            $this->budget->balance += (float)$this->value;
             $budget->save();
         }
 
