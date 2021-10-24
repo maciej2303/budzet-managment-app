@@ -6,6 +6,7 @@ use App\Constants\Frequency;
 use App\Models\Category;
 use App\Models\CyclicOperation;
 use App\Models\Operation;
+use App\Services\BudgetService;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -17,8 +18,10 @@ class Budget extends Component
     public $creating, $deleting, $editing = false, $budget, $date;
     public $name, $value, $description, $image, $income, $category_id, $selected_id;
     public $frequencies, $cyclic = false, $frequency;
+    public $categories, $categoryExpenses;
     public $thresholdModal;
     public $threshold;
+    public $showOperation, $operation;
 
     protected $rules = [
         'name' => 'required|string|max:200',
@@ -35,16 +38,33 @@ class Budget extends Component
     {
         $this->frequencies = Frequency::FREQUENCIES;
         $this->frequency = Frequency::MONTH;
+        $this->budget = auth()->user()->budget()->with('operations', 'members')->first();
+        $this->categories = $this->budget->allCategories();
     }
 
     public function render()
     {
-        $this->budget = auth()->user()->budget;
-        $this->threshold = $this->budget->threshold;
+        $this->categoryExpenses = $this->categories;
+        $this->operations = $this->budget->currentMonthOperations();
+
+        foreach ($this->categoryExpenses as $category) {
+            $category->sum = 0;
+            foreach ($this->operations as $operation) {
+                if ($category->id == $operation->category_id && $operation->value > 0) {
+                    $category->expenses += $operation->value;
+                }
+            }
+            $category->percentOfAllExpenses = round(abs(($category->expenses / $this->budget->currentMonthExpenses() * 100)), 2);
+        }
+
+        $this->categoryExpenses = $this->categoryExpenses->sortByDesc('expenses');
+
+        $chart = BudgetService::generateBalanceChartForLastThirtyDays($this->budget);
+
         $this->dispatchBrowserEvent('contentChanged');
         return view('livewire.budget.crud', [
             'budget' => $this->budget,
-            'categories' => Category::all(),
+            'chart' => $chart,
         ]);
     }
 
@@ -62,6 +82,12 @@ class Budget extends Component
         $this->resetInputs();
         $this->date = today()->format('Y-m-d');
         $this->income = true;
+    }
+
+    public function showOperation($operation)
+    {
+        $this->showOperation = true;
+        $this->operation = $operation;
     }
 
     public function thresholdModal()

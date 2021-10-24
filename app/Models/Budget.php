@@ -30,6 +30,13 @@ class Budget extends Model
         return false;
     }
 
+    public function currentMonthOperations()
+    {
+        $operations = $this->operations()->whereMonth('created_at', '=', now()->month)->get();
+
+        return $operations;
+    }
+
     public function currentMonthExpenses()
     {
         $expenses = $this->operations()->whereMonth('created_at', '=', now()->month)->where('income', false)->get()->sum('value');

@@ -48,7 +48,7 @@
                                         d="M7 11l5-5m0 0l5 5m-5-5v12" />
                                 </svg>
                                 Przychód:
-                                <span class="text-green-500 ml-2">{{ number_format($budget->currentMonthIncomes, 2) }} zł</span>
+                                <span class="text-green-500 ml-2">{{ number_format($budget->currentMonthIncomes(), 2) }} zł</span>
                             </span>
                             <span class="flex">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none"
