@@ -9,8 +9,8 @@
             </x-slot>
             <x-slot name="content">
                 <div class="mt-4">
-                    {{-- {{$operation->name ?? ''}}
-                    {{$operation->created_at->format('d.m.Y') ?? ''}} --}}
+                    {{$operation->name ?? ''}}
+                    {{$operation->created_at->format('d.m.Y') ?? ''}}
                 </div>
             </x-slot>
 
