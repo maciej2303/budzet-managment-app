@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Budget;
+use App\Models\Operation;
 use Asantibanez\LivewireCharts\Models\LineChartModel;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -10,7 +11,7 @@ use stdClass;
 
 class BudgetService
 {
-    public static function generateBalanceChartFromOperations($year, $month, $operations): LineChartModel
+    public static function generateBalanceChartFromOperations($year, $month, $operations, $budget_id): LineChartModel
     {
         $start = Carbon::createFromDate($year, $month)->startOfMonth();
         $end = Carbon::createFromDate($year, $month)->endOfMonth();
@@ -20,7 +21,16 @@ class BudgetService
 
         $period = CarbonPeriod::create($start, $end)->toArray();
         $days = [];
-        $budgetValueOnStart = $operations->first()->balance_before;
+        if (!empty($operations)) {
+            $operation = Operation::where('budget_id', $budget_id)->whereMonth('created_at', '<', $month)->first();
+            if ($operation != null)
+                $budgetValueOnStart = $operation->balance_before + $operation->value;
+            else
+                $budgetValueOnStart = 0;
+        } else {
+            $budgetValueOnStart = $operations->first()->balance_before;
+        }
+
         foreach ($period as $day) {
             $days[$day->format('d.m.Y')] = new stdClass();
             foreach ($operations as $key => $operation) {

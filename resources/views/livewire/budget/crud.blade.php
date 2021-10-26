@@ -14,44 +14,69 @@
                         <div class="rounded-t mb-0 px-0 border-0">
                             <div class="px-4 py-2">
                                 <h3 class="font-semibold text-gray-900 dark:text-gray-50 text-lg inline">Budżet</h3>
-                                
-                                <table class="items-center w-full bg-transparent border-collapse">
-                                    <thead>
-                                        <tr>
-                                            <td class="pl-6">
-                                                <p class="flex">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24"
-                                                        stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12" />
-                                                    </svg>
-                                                    Przychód:
-                                                </p>
-                                                <p class="text-green-500">
-                                                    {{ number_format($budget->currentMonthIncomes(), 2) }}
-                                                    zł</p>
-                                            </td>
-                                            <td class="">
-                                                <p class="flex">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500"
-                                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
-                                                    </svg> Wydatki:
-                                                </p>
-                                                <p class="text-red-500">
-                                                    {{ number_format($budget->currentMonthExpenses(), 2) }}
-                                                    zł
-                                                </p>
-                                            </td>
-                                            <td class="align-middle p-4 pl-0">
-                                                <p>Saldo konta:</p>
-                                                <p>{{ number_format($budget->balance, 2) }}</p>
-                                            </td>
-                                        </tr>
-                                    </thead>
-                                </table>
+                                {{-- Sekcja miesięczna --}}
+                                <div class="flex flex-wrap overflow-hidden">
+                                    <div class="w-1/4 overflow-hidden flex items-center" wire:click="previousMonth">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z" />
+                                        </svg>
+                                    </div>
+
+                                    <div class="w-1/2 overflow-hidden flex justify-center items-center">
+                                        <div class="text-center">
+                                            <span>{{$months[$month]}}</span>
+                                            <p class="font-bold text-xl">{{ number_format($budget->balance, 2) }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="w-1/4 overflow-hidden flex justify-end items-center"
+                                        wire:click="nextMonth">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                {{-- Sekcja miesięczna --}}
+                                {{-- Sekcja przychodow i wydatkow --}}
+                                <div class="flex flex-wrap overflow-hidden">
+                                    <div class="w-1/2 overflow-hidden flex justify-center">
+                                        <div>
+                                            <p class="flex">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                                                </svg>
+                                                Przychód:
+                                            </p>
+                                            <p class="text-green-500">
+                                                {{ number_format($incomes, 2) }}
+                                                zł</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="w-1/2 overflow-hidden flex justify-center">
+                                        <div>
+                                            <p class="flex">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
+                                                </svg> Wydatki:
+                                            </p>
+                                            <p class="text-red-500">
+                                                {{ number_format($expenses, 2) }}
+                                                zł
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                {{-- Sekcja przychodow i wydatkow --}}
                             </div>
                             <div class="px-4 py-2">
                                 <div class="relative w-full max-w-full">
@@ -65,10 +90,10 @@
                                     </svg>
                                 </div>
                             </div>
-                            <div class="block w-full overflow-x-auto">
+                            <div class="block w-full overflow-x-auto" style="max-height: 600px">
                                 <table class="items-center w-full bg-transparent border-collapse">
                                     <tbody>
-                                        @foreach ($operations as $operation)
+                                        @forelse ($operations as $operation)
 
                                         <tr class="text-gray-700 dark:text-gray-100 hover:bg-gray-300"
                                             wire:click="showOperation({{$operation}})" wire:loading.attr="disabled">
@@ -92,7 +117,9 @@
                                                     {{ $operation->value}} PLN</p>
                                             </td>
                                         </tr>
-                                        @endforeach
+                                        @empty
+                                                <p class="px-4">Brak operacji</p>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
@@ -151,7 +178,7 @@
                                         kategorię</h2>
                                 </div>
                             </div>
-                            <div class="block w-full overflow-x-auto">
+                            <div class="block w-full overflow-x-auto" style="max-height: 310px">
                                 <table class="items-center w-full bg-transparent border-collapse">
                                     <tbody>
                                         @foreach ($categoryExpenses as $category)

@@ -9,8 +9,10 @@
             </x-slot>
             <x-slot name="content">
                 <div class="mt-4">
+                    @if($operation != null)
                     {{$operation->name ?? ''}}
                     {{$operation->created_at->format('d.m.Y') ?? ''}}
+                    @endif
                 </div>
             </x-slot>
 

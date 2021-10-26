@@ -21,8 +21,9 @@ class Budget extends Component
     public $categories, $categoryExpenses;
     public $thresholdModal;
     public $threshold;
-    public $showOperation, $operation, $operations;
+    public $showOperation, $operation, $operations, $expenses, $incomes;
     public $month, $year;
+    public $months = ['', 'Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'];
 
     protected $rules = [
         'name' => 'required|string|max:200',
@@ -49,6 +50,8 @@ class Budget extends Component
     public function render()
     {
         $this->operations = $this->budget->operations()->whereMonth('created_at', '=', $this->month)->whereYear('created_at', '=', $this->year)->get();
+        $this->expenses = $this->operations->where('income', false)->sum('value');
+        $this->incomes = $this->operations->where('income', true)->sum('value');
 
         foreach ($this->categoryExpenses as $category) {
             $category->sum = 0;
@@ -60,7 +63,7 @@ class Budget extends Component
             $category->percentOfAllExpenses = round(abs(($category->expenses / $this->budget->currentMonthExpenses() * 100)), 2);
         }
         $this->categoryExpenses = $this->categoryExpenses->sortByDesc('expenses');
-        $chart = BudgetService::generateBalanceChartFromOperations($this->year, $this->month, clone $this->operations);
+        $chart = BudgetService::generateBalanceChartFromOperations($this->year, $this->month, clone $this->operations, $this->budget->id);
         $this->operations = $this->operations->sortByDesc('created_at');
         $this->dispatchBrowserEvent('contentChanged');
         return view('livewire.budget.crud', [
@@ -182,5 +185,33 @@ class Budget extends Component
         $this->income = false;
         $this->category_id = 1;
         $this->cyclic = false;
+    }
+
+    public function nextMonth()
+    {
+        switch ($this->month) {
+            case 12:
+                $this->month = 1;
+                $this->year++;
+                break;
+
+            default:
+                $this->month++;
+                break;
+        }
+    }
+
+    public function previousMonth()
+    {
+        switch ($this->month) {
+            case 1:
+                $this->month = 12;
+                $this->year;
+                break;
+
+            default:
+                $this->month--;
+                break;
+        }
     }
 }
