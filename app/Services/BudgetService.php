@@ -22,7 +22,7 @@ class BudgetService
         $period = CarbonPeriod::create($start, $end)->toArray();
         $days = [];
         if (!empty($operations)) {
-            $operation = Operation::where('budget_id', $budget_id)->whereMonth('created_at', '<', $month)->first();
+            $operation = $month < today()->month ? Operation::where('budget_id', $budget_id)->whereMonth('created_at', '<', $month)->first() : null;
             if ($operation != null)
                 $budgetValueOnStart = $operation->balance_before + $operation->value;
             else

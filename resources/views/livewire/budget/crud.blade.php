@@ -26,7 +26,8 @@
 
                                     <div class="w-1/2 overflow-hidden flex justify-center items-center">
                                         <div class="text-center">
-                                            <span>{{$months[$month]}}</span>
+                                            <p class="m-0">{{$months[$month]}}</p>
+                                            <p class="text-xs">{{$year}}</p>
                                             <p class="font-bold text-xl">{{ number_format($budget->balance, 2) }}</p>
                                         </div>
                                     </div>
@@ -42,7 +43,7 @@
                                 </div>
                                 {{-- Sekcja miesięczna --}}
                                 {{-- Sekcja przychodow i wydatkow --}}
-                                <div class="flex flex-wrap overflow-hidden">
+                                <div class="flex flex-wrap overflow-hidden pt-4">
                                     <div class="w-1/2 overflow-hidden flex justify-center">
                                         <div>
                                             <p class="flex">

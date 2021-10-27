@@ -206,7 +206,7 @@ class Budget extends Component
         switch ($this->month) {
             case 1:
                 $this->month = 12;
-                $this->year;
+                $this->year--;
                 break;
 
             default:
