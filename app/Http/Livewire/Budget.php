@@ -21,7 +21,7 @@ class Budget extends Component
     public $categories, $categoryExpenses;
     public $thresholdModal;
     public $threshold;
-    public $showOperation, $operation, $operations, $expenses, $incomes;
+    public $showOperation, $operationOnModal, $operations, $expenses, $incomes;
     public $month, $year;
     public $months = ['', 'Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'];
 
@@ -81,10 +81,10 @@ class Budget extends Component
     }
 
 
-    public function showOperation($operation)
+    public function showOperation($id)
     {
+        $this->operationOnModal = Operation::find($id);
         $this->showOperation = true;
-        $this->operation = $operation;
     }
 
     public function thresholdModal()
@@ -170,9 +170,10 @@ class Budget extends Component
         $this->budget->balance -= $operation->value;
         $this->budget->save();
         $operation->delete();
-
         $this->selected_id = null;
         $this->deleting = false;
+        $this->showOperation = false;
+        $this->operationOnModal = null;
         $this->resetInputs();
     }
 

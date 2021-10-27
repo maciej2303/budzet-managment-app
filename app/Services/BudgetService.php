@@ -18,19 +18,22 @@ class BudgetService
         if ($month == today()->month) {
             $end = today();
         }
-
         $period = CarbonPeriod::create($start, $end)->toArray();
         $days = [];
-        if (!empty($operations)) {
-            $operation = $month < today()->month ? Operation::where('budget_id', $budget_id)->whereMonth('created_at', '<', $month)->first() : null;
-            if ($operation != null)
-                $budgetValueOnStart = $operation->balance_before + $operation->value;
-            else
-                $budgetValueOnStart = 0;
+
+        if ($operations->isEmpty()) {
+            if ($month < today()->month) {
+                $operation = Operation::where('budget_id', $budget_id)->whereMonth('created_at', '<', $month)->first();
+                if ($operation != null)
+                    $budgetValueOnStart = $operation->balance_before + $operation->value;
+                else
+                    $budgetValueOnStart = 0;
+            } else {
+                $budgetValueOnStart = Budget::where('id', $budget_id)->first()->balance;
+            }
         } else {
             $budgetValueOnStart = $operations->first()->balance_before;
         }
-
         foreach ($period as $day) {
             $days[$day->format('d.m.Y')] = new stdClass();
             foreach ($operations as $key => $operation) {

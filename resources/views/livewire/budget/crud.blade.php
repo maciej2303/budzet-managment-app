@@ -97,7 +97,7 @@
                                         @forelse ($operations as $operation)
 
                                         <tr class="text-gray-700 dark:text-gray-100 hover:bg-gray-300"
-                                            wire:click="showOperation({{$operation}})" wire:loading.attr="disabled">
+                                            wire:click="showOperation({{$operation->id}})" wire:loading.attr="disabled">
                                             <th colspan="2"
                                                 class="w-full border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex flex-row flex-wrap">
                                                 <img class="w-16 h-auto self-center"
@@ -222,9 +222,9 @@
         </div>
     </div>
     @include('livewire.budget.create')
-    @include('livewire.budget.delete')
     @include('livewire.budget.showOperation')
     @include('livewire.budget.threshold')
+        @include('livewire.budget.delete')
 </div>
 @push('js')
 <script>
