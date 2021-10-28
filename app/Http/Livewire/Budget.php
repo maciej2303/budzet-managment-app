@@ -49,7 +49,7 @@ class Budget extends Component
 
     public function render()
     {
-        $this->operations = $this->budget->operations()->whereMonth('created_at', '=', $this->month)->whereYear('created_at', '=', $this->year)->get();
+        $this->operations = $this->budget->operations()->whereMonth('created_at', '=', $this->month)->whereYear('created_at', '=', $this->year)->orderBy('created_at')->get();
         $this->expenses = $this->operations->where('income', false)->sum('value');
         $this->incomes = $this->operations->where('income', true)->sum('value');
 
@@ -165,6 +165,7 @@ class Budget extends Component
 
     public function destroy()
     {
+        //TODO Należy w każdej operacji po tej przepisać balance_at na poprawny;
         $operation = Operation::find($this->selected_id);
         Storage::delete(str_replace('storage/', 'public/', $operation->image));
         $this->budget->balance -= $operation->value;
