@@ -53,18 +53,9 @@ class Budget extends Component
         $this->expenses = $this->operations->where('income', false)->sum('value');
         $this->incomes = $this->operations->where('income', true)->sum('value');
 
-        foreach ($this->categoryExpenses as $category) {
-            $category->sum = 0;
-            foreach ($this->operations as $operation) {
-                if ($category->id == $operation->category_id && $operation->value > 0) {
-                    $category->expenses += $operation->value;
-                }
-            }
-            $category->percentOfAllExpenses = round(abs(($category->expenses / $this->budget->currentMonthExpenses() * 100)), 2);
-        }
-        $this->categoryExpenses = $this->categoryExpenses->sortByDesc('expenses');
         $chart = BudgetService::generateBalanceChartFromOperations($this->year, $this->month, clone $this->operations, $this->budget->id);
         $this->operations = $this->operations->sortByDesc('created_at');
+
         $this->dispatchBrowserEvent('contentChanged');
         return view('livewire.budget.crud', [
             'budget' => $this->budget,

@@ -17,7 +17,7 @@ class CyclicOperations extends Component
         $this->budget = auth()->user()->budget;
         $this->dispatchBrowserEvent('contentChanged');
         return view('livewire.cyclic-operations.index', [
-            'budget' => $this->budget,
+            'cyclicOperations' => $this->budget->cyclicOperations,
         ]);
     }
 

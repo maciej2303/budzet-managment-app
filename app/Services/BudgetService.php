@@ -15,9 +15,7 @@ class BudgetService
     {
         $start = Carbon::createFromDate($year, $month)->startOfMonth();
         $end = Carbon::createFromDate($year, $month)->endOfMonth();
-        if ($month == today()->month) {
-            $end = today();
-        }
+
         $period = CarbonPeriod::create($start, $end)->toArray();
         $days = [];
 

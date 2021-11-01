@@ -15,7 +15,7 @@ class Operation extends Model
 
         self::creating(function ($model) {
             // dd($model->budget->balance);
-            $model->balance_before = $model->budget->balance + $model->value;
+            $model->balance_before = $model->budget->balance;
         });
     }
 
