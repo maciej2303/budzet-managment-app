@@ -1,3 +1,9 @@
+<style>
+.apexcharts-xaxis-label:nth-child(2n + 1) {
+  display: none;
+}
+</style>
+
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         {{ __('Raporty') }}
@@ -19,7 +25,7 @@
                             <option value="-1">Wybierz kategorię</option>
                             @foreach ($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->name }}</option>
-                            @endforeach
+                        @endforeach
                         </select> --}}
                         <select name="period" type="period"
                             class="form-select shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full sm:w-1/3 my-4 mr-2"
@@ -55,7 +61,8 @@
                                         d="M7 11l5-5m0 0l5 5m-5-5v12" />
                                 </svg>
                                 Przychód:
-                                <span class="text-green-500 ml-2">{{ number_format($budget->currentMonthIncomes(), 2) }} zł</span>
+                                <span class="text-green-500 ml-2">{{ number_format($budget->currentMonthIncomes(), 2) }}
+                                    zł</span>
                             </span>
                             <span class="flex">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none"
@@ -64,7 +71,7 @@
                                         d="M17 13l-5 5m0 0l-5-5m5 5V6" />
                                 </svg> Wydatki: <span class="text-red-500 ml-2">{{ number_format($expenses, 2) }}
                                     zł</span>
-                                </span>
+                            </span>
                         </div>
                         <div class="block">
                             @foreach ($categories as $category)
@@ -87,11 +94,17 @@
                             <livewire:livewire-line-chart key="{{ $chart->reactiveKey() }}"
                                 :line-chart-model="$chart" />
                         </div>
+
+                        <div style="height: 600px !important;">
+                            <livewire:livewire-column-chart key="{{ $incomeExpenseChart->reactiveKey() }}"
+                                :column-chart-model="$incomeExpenseChart" />
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 @push('js')
 <script src="{{asset('js/budget/datepicker.js')}}"></script>

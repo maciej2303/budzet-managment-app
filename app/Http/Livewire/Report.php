@@ -3,8 +3,10 @@
 namespace App\Http\Livewire;
 
 use App\Constants\Months;
+use Asantibanez\LivewireCharts\Models\ColumnChartModel;
 use Asantibanez\LivewireCharts\Models\LineChartModel;
 use Carbon\CarbonPeriod;
+use Illuminate\Support\Carbon;
 use Livewire\Component;
 use stdClass;
 
@@ -72,10 +74,14 @@ class Report extends Component
         $this->dispatchBrowserEvent('contentChanged');
 
         // ! Ile przychodu kazdego dnia
-        //TODO: do refaktoru
-        $period = CarbonPeriod::create($this->dateFrom, $this->dateTo)->toArray();
+        $start = Carbon::createFromDate($this->today->year, $this->today->month - 1)->startOfMonth();
+        $end = Carbon::createFromDate($this->today->year, $this->today->month - 1)->endOfMonth();
+        $period = CarbonPeriod::create($start, $end)->toArray();
         $days = [];
+        $periodArray = [];
+        $i = 0;
         foreach ($period as $day) {
+            $periodArray[] = $day->format('d.m.Y');
             $day_income = 0;
             $day_expense = 0;
             $days[$day->format('d.m.Y')] = new stdClass();
@@ -91,11 +97,13 @@ class Report extends Component
             $days[$day->format('d.m.Y')]->expense = $day_expense;
         }
 
-        $operationsChart =  (new LineChartModel())
+        $incomeExpenseChart =  (new ColumnChartModel())->multiColumn()->setColors(['#f52314', '#14f557'])->setXAxisCategories($periodArray)
             ->setTitle('Wykres przychodów i wydatków');
         foreach ($days as $key => $day) {
-            $operationsChart->addPoint($key, $day->amount);
+            $incomeExpenseChart->addSeriesColumn('Wydatek', '1.01.2021', abs($day->expense) . ' PLN');
+            $incomeExpenseChart->addSeriesColumn('Przychód', $key, $day->income . ' PLN');
         }
+
 
         $period = CarbonPeriod::create($this->dateFrom, $this->dateTo)->toArray();
         $days = [];
@@ -116,6 +124,6 @@ class Report extends Component
             $chart->addPoint($key, $day->amount);
         }
 
-        return view('livewire.reports.report',  ['chart' => $chart]);
+        return view('livewire.reports.report',  ['chart' => $chart, 'incomeExpenseChart' => $incomeExpenseChart]);
     }
 }
