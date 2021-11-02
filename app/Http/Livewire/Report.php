@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Constants\Months;
 use Asantibanez\LivewireCharts\Models\LineChartModel;
 use Carbon\CarbonPeriod;
 use Livewire\Component;
@@ -14,25 +15,47 @@ class Report extends Component
     public $dateFrom, $dateTo;
     public $search;
     public $operations, $expenses, $incomes;
+    public $today;
+    public $periods;
+    public $period = 'prev_month';
 
     public function mount()
     {
-        $this->budget = auth()->user()->budget()->with('operations', 'members')->first();
+        $this->budget = auth()->user()->budget;
         $this->categories = $this->budget->allCategories();
-        $this->dateFrom = today()->firstOfMonth()->format('Y-m-d');
-        $this->dateTo = today()->lastOfMonth()->format('Y-m-d');
+        $this->today = today();
+        $this->dateFrom =  $this->today->firstOfMonth()->format('Y-m-d');
+        $this->dateTo =  $this->today->lastOfMonth()->format('Y-m-d');
+        $months = Months::MONTHS;
+        $this->periods = [
+            'current_month' => 'Bieżący miesiąc (' . $months[$this->today->month] . ')',
+            'prev_month' => 'Poprzedni miesiąc (' . $months[$this->today->month - 1] . ')',
+            'current_year' => 'Bieżący rok (' .  $this->today->year . ')',
+            'prev_year' => 'Bieżący rok (' . ($this->today->year - 1) . ')',
+            'all' => 'Cała dostępna historia',
+        ];
     }
 
     public function render()
     {
-        $operations = $this->budget->operations()->whereBetween('created_at', [$this->dateFrom, $this->dateTo]);
+        switch ($this->period) {
+            case 'current_month':
+                # code...
+                break;
+            case 'prev_month':
+                $this->operations = $this->budget->operations()->whereMonth('created_at', ($this->today->month - 1))->whereYear('created_at', $this->today->year)->get();
+                break;
+            default:
+                # code...
+                break;
+        }
 
-        if ($this->category != -1)
-            $operations = $operations->whereHas('category', function ($query) {
-                return $query->where('id', $this->category);
-            });
+        // if ($this->category != -1)
+        //     $operations = $operations->whereHas('category', function ($query) {
+        //         return $query->where('id', $this->category);
+        //     });
 
-        $this->operations = $operations->get();
+        // $this->operations = $operations->get();
 
         foreach ($this->categories as $category) {
             $category->sum = 0;
@@ -50,28 +73,33 @@ class Report extends Component
 
         // ! Ile przychodu kazdego dnia
         //TODO: do refaktoru
-        // $period = CarbonPeriod::create($this->dateFrom, $this->dateTo)->toArray();
-        // $days = [];
-        // foreach ($period as $day) {
-        //     $day_value = 0;
-        //     $days[$day->format('d.m.Y')] = new stdClass();
-        //     foreach ($this->operations as $operation) {
-        //         if ($operation->created_at->format('d.m.Y') == $day->format('d.m.Y')) {
-        //             $day_value += $operation->value;
-        //         }
-        //     }
-        //     $days[$day->format('d.m.Y')]->amount = $day_value;
-        // }
+        $period = CarbonPeriod::create($this->dateFrom, $this->dateTo)->toArray();
+        $days = [];
+        foreach ($period as $day) {
+            $day_income = 0;
+            $day_expense = 0;
+            $days[$day->format('d.m.Y')] = new stdClass();
+            foreach ($this->operations as $operation) {
+                if ($operation->created_at->format('d.m.Y') == $day->format('d.m.Y')) {
+                    if ($operation->income)
+                        $day_income += $operation->value;
+                    else
+                        $day_expense += $operation->value;
+                }
+            }
+            $days[$day->format('d.m.Y')]->income = $day_income;
+            $days[$day->format('d.m.Y')]->expense = $day_expense;
+        }
 
-        // $chart =  (new LineChartModel())
-        //     ->setTitle('Expenses by Type');
-        // foreach ($days as $key => $day) {
-        //     $chart->addPoint($key, $day->amount);
-        // }
+        $operationsChart =  (new LineChartModel())
+            ->setTitle('Wykres przychodów i wydatków');
+        foreach ($days as $key => $day) {
+            $operationsChart->addPoint($key, $day->amount);
+        }
 
         $period = CarbonPeriod::create($this->dateFrom, $this->dateTo)->toArray();
         $days = [];
-        $budgetValueOnStart = $this->operations->first()->balance_before;
+        $budgetValueOnStart =  $this->operations->first() != null ? $this->operations->first()->balance_before : 0;
         foreach ($period as $day) {
 
             $days[$day->format('d.m.Y')] = new stdClass();

@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Constants\Frequency;
+use App\Constants\Months;
 use App\Models\Category;
 use App\Models\CyclicOperation;
 use App\Models\Operation;
@@ -23,7 +24,7 @@ class Budget extends Component
     public $threshold;
     public $showOperation, $operationOnModal, $operations, $expenses, $incomes;
     public $month, $year;
-    public $months = ['', 'Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'];
+    public $months = Months::MONTHS;
 
     protected $rules = [
         'name' => 'required|string|max:200',
@@ -154,7 +155,6 @@ class Budget extends Component
 
     public function destroy()
     {
-        //TODO Należy w każdej operacji po tej przepisać balance_at na poprawny;
         $operation = Operation::find($this->selected_id);
         Storage::delete(str_replace('storage/', 'public/', $operation->image));
         $this->budget->balance -= $operation->value;
