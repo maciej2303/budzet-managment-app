@@ -96,7 +96,7 @@ class Budget extends Component
     public function save()
     {
         $this->validate();
-        $budgetId = auth()->user()->budget->id;
+        $budgetId = $this->budget->id;
         if (!$this->cyclic || Carbon::parse($this->date) == today()) {
             $operation = new Operation();
             $operation->name = $this->name;
@@ -114,13 +114,11 @@ class Budget extends Component
                 $operation->image = str_replace('public/', 'storage/', $image_path);
             }
 
-            $operation->created_at =  Carbon::parse($this->date);
+            $operation->created_at =  Carbon::parse($this->date) == today() ? now() : Carbon::parse($this->date);
             $operation->save();
 
-            $budget = auth()->user()->budget;
-            $budget->balance += (float)$this->value;
             $this->budget->balance += (float)$this->value;
-            $budget->save();
+            $this->budget->save();
         }
 
         if ($this->cyclic) {
@@ -161,6 +159,14 @@ class Budget extends Component
         Storage::delete(str_replace('storage/', 'public/', $operation->image));
         $this->budget->balance -= $operation->value;
         $this->budget->save();
+        $value = $operation->value;
+        $created_at = $operation->created_at;
+
+        $operations = $this->budget->operations()->where('created_at', '>', $created_at)->get();
+        foreach ($operations as $old_operation) {
+            $old_operation->balance_before -= $value;
+            $old_operation->save();
+        }
         $operation->delete();
         $this->selected_id = null;
         $this->deleting = false;
