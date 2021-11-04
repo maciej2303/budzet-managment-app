@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Budget;
 use App\Models\Operation;
+use Asantibanez\LivewireCharts\Models\ColumnChartModel;
 use Asantibanez\LivewireCharts\Models\LineChartModel;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -49,5 +50,39 @@ class BudgetService
         }
 
         return $chart;
+    }
+
+    public static function generateIncomeAndExpenseMonthlyChart($year, $month, $operations): ColumnChartModel
+    {
+        $start = Carbon::createFromDate($year, $month)->startOfMonth();
+        $end = Carbon::createFromDate($year, $month)->endOfMonth();
+        $period = CarbonPeriod::create($start, $end)->toArray();
+        $days = [];
+        $periodArray = [];
+        foreach ($period as $day) {
+            $periodArray[] = $day->format('d.m.Y');
+            $day_income = 0;
+            $day_expense = 0;
+            $days[$day->format('d.m.Y')] = new stdClass();
+            foreach ($operations as $operation) {
+                if ($operation->created_at->format('d.m.Y') == $day->format('d.m.Y')) {
+                    if ($operation->income)
+                        $day_income += $operation->value;
+                    else
+                        $day_expense += $operation->value;
+                }
+            }
+            $days[$day->format('d.m.Y')]->income = $day_income;
+            $days[$day->format('d.m.Y')]->expense = $day_expense;
+        }
+
+        $incomeExpenseChart =  (new ColumnChartModel())->multiColumn()->setColors(['#f52314', '#14f557'])->setXAxisCategories($periodArray)
+            ->setTitle('Wykres przychodów i wydatków');
+        foreach ($days as $key => $day) {
+            $incomeExpenseChart->addSeriesColumn('Wydatek', '1.01.2021', abs($day->expense) . ' PLN');
+            $incomeExpenseChart->addSeriesColumn('Przychód', $key, $day->income . ' PLN');
+        }
+
+        return $incomeExpenseChart;
     }
 }
