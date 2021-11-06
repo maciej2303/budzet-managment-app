@@ -20,7 +20,8 @@ class Report extends Component
     public $operations, $expenses, $incomes;
     public $today;
     public $periods;
-    public $period = 'current_month';
+    public $xd;
+    public $period = '';
 
     public function mount()
     {
@@ -35,31 +36,26 @@ class Report extends Component
             'prev_year' => 'Bieżący rok (' . ($this->today->year - 1) . ')',
             'all' => 'Cała dostępna historia',
         ];
+        $this->xd = 'current_month';
     }
 
     public function render()
     {
-        switch ($this->period) {
-            case 'current_month':
-                $month = $this->today->month;
-                $year = $this->today->year;
-                $this->operations = $this->budget->operations()->whereMonth('created_at', ($month))->whereYear('created_at', $year)->get();
-            case 'prev_month':
-                // $month = $this->today->month - 1;
-                // $year = $this->today->year;
-                // $this->operations = $this->budget->operations()->whereMonth('created_at', ($month))->whereYear('created_at', $year)->get();
-                break;
-            default:
-                # code...
-                break;
+        if ($this->period == 'prev_month') {
+            $month = $this->today->month - 1;
+            $year = $this->today->year;
+            $operations = $this->budget->operations()->whereMonth('created_at', ($month))->whereYear('created_at', $year);
+        } else {
+            $month = $this->today->month;
+            $year = $this->today->year;
+            $operations = $this->budget->operations()->whereMonth('created_at', ($month))->whereYear('created_at', $year);
         }
+        if ($this->category != -1)
+            $operations = $operations->whereHas('category', function ($query) {
+                return $query->where('id', $this->category);
+            });
 
-        // if ($this->category != -1)
-        //     $operations = $operations->whereHas('category', function ($query) {
-        //         return $query->where('id', $this->category);
-        //     });
-
-        // $this->operations = $operations->get();
+        $this->operations = $operations->get();
 
         foreach ($this->categories as $category) {
             $category->sum = 0;

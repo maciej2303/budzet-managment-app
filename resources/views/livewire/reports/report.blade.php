@@ -19,19 +19,19 @@
                     <div class="w-full flex">
                         <x-jet-input type="text" class="w-full sm:w-1/3 my-4 mr-2" name="search" wire:model='search'
                             placeholder="Szukaj" />
-                        {{-- <select name="category" type="category"
+                        <select name="category" type="category"
                             class="form-select shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full sm:w-1/3 my-4 mr-2"
                             x-ref="category" wire:model="category">
                             <option value="-1">Wybierz kategorię</option>
                             @foreach ($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                         @endforeach
-                        </select> --}}
-                        <select name="period" type="period"
+                        </select>
+                        <select name="period" wire:model="xd" id="period"
                             class="form-select shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full sm:w-1/3 my-4 mr-2"
-                            x-ref="period" wire:model="period">
+                            >
                             @foreach ($periods as $key => $period)
-                            <option value="{{ $key }}">{{ $period }}</option>
+                            <option value="{{ $key }}" wire:key="{{$key}}">{{ $period }}</option>
                             @endforeach
                         </select>
                         {{-- <div class="mt-4">
@@ -108,5 +108,4 @@
 </div>
 @push('js')
 <script src="{{asset('js/budget/datepicker.js')}}"></script>
-<script src="{{asset('js/reports/chart.js')}}"></script>
 @endpush
