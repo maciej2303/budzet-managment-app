@@ -203,4 +203,17 @@ class ReportService
 
         return $incomeExpenseChart;
     }
+
+    public static function generateCategoryExpenseChart($categories): ColumnChartModel
+    {
+        
+        $incomeExpenseChart =  (new ColumnChartModel())->multiColumn()->setColors(['#f52314', '#14f557'])->setXAxisCategories($periodArray)
+            ->setTitle('Wykres przychodów i wydatków');
+        foreach ($days as $key => $day) {
+            $incomeExpenseChart->addSeriesColumn('Wydatek', '1.01.2021', abs($day->expense) . ' PLN');
+            $incomeExpenseChart->addSeriesColumn('Przychód', $key, $day->income . ' PLN');
+        }
+
+        return $incomeExpenseChart;
+    }
 }

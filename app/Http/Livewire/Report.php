@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Constants\Months;
 use App\Services\BudgetService;
 use App\Services\ReportService;
+use Asantibanez\LivewireCharts\Models\PieChartModel;
 
 class Report extends Component
 {
@@ -74,20 +75,45 @@ class Report extends Component
         }
 
         $this->operations = $operations;
-
+        $this->expenses = $this->operations->where('income', false)->sum('value');
         foreach ($this->categories as $category) {
             $category->sum = 0;
+            $category->expenses = 0;
+            $category->incomes = 0;
             foreach ($this->operations as $operation) {
                 if ($category->id == $operation->category_id) {
                     $category->sum += $operation->value;
+                    if ($operation->income) {
+                        $category->incomes += $operation->value;
+                    } else {
+                        $category->expenses += $operation->value;
+                    }
                 }
             }
+            if ($this->expenses == 0)
+                $category->percentOfAllExpenses = 0;
+            else
+                $category->percentOfAllExpenses = round(abs(($category->expenses / $this->expenses * 100)), 2);
         }
 
+        $categoryExpenseChart = (new PieChartModel())->setTitle('Wykres wydatków')->withDataLabels();
+        foreach ($this->categories->sortByDesc('percentOfAllExpenses') as $category) {
+            $categoryExpenseChart->addSlice($category->name, ($category->percentOfAllExpenses), $this->rand_color());
+        }
 
         $this->expenses = $this->operations->where('income', false)->sum('value');
         $this->incomes = $this->operations->where('income', true)->sum('value');
         $this->dispatchBrowserEvent('contentChanged');
-        return view('livewire.reports.report',  ['chart' => $chart, 'incomeExpenseChart' => $incomeExpenseChart]);
+        return view('livewire.reports.report',  [
+            'chart' => $chart,
+            'incomeExpenseChart' => $incomeExpenseChart,
+            'categoryExpenseChart' => $categoryExpenseChart
+        ]);
+    }
+
+
+    function rand_color()
+    {
+        return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
     }
 }
