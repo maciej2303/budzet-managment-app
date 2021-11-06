@@ -2,14 +2,10 @@
 
 namespace App\Http\Livewire;
 
+use Livewire\Component;
 use App\Constants\Months;
 use App\Services\BudgetService;
-use Asantibanez\LivewireCharts\Models\ColumnChartModel;
-use Asantibanez\LivewireCharts\Models\LineChartModel;
-use Carbon\CarbonPeriod;
-use Illuminate\Support\Carbon;
-use Livewire\Component;
-use stdClass;
+use App\Services\ReportService;
 
 class Report extends Component
 {
@@ -19,43 +15,65 @@ class Report extends Component
     public $search;
     public $operations, $expenses, $incomes;
     public $today;
-    public $periods;
-    public $xd;
-    public $period = '';
-
+    public $periods, $period = 'current_month';
     public function mount()
     {
-        $this->budget = auth()->user()->budget;
+        $this->budget = auth()->user()->budget()->with('operations', 'members')->first();
         $this->categories = $this->budget->allCategories();
+        $this->dateFrom = today()->firstOfMonth()->format('Y-m-d');
+        $this->dateTo = today()->lastOfMonth()->format('Y-m-d');
         $this->today = today();
         $months = Months::MONTHS;
         $this->periods = [
             'current_month' => 'Bieżący miesiąc (' . $months[$this->today->month] . ')',
             'prev_month' => 'Poprzedni miesiąc (' . $months[$this->today->month - 1] . ')',
             'current_year' => 'Bieżący rok (' .  $this->today->year . ')',
-            'prev_year' => 'Bieżący rok (' . ($this->today->year - 1) . ')',
+            'prev_year' => 'Poprzedni rok (' . ($this->today->year - 1) . ')',
             'all' => 'Cała dostępna historia',
         ];
-        $this->xd = 'current_month';
     }
 
     public function render()
     {
-        if ($this->period == 'prev_month') {
-            $month = $this->today->month - 1;
-            $year = $this->today->year;
-            $operations = $this->budget->operations()->whereMonth('created_at', ($month))->whereYear('created_at', $year);
-        } else {
-            $month = $this->today->month;
-            $year = $this->today->year;
-            $operations = $this->budget->operations()->whereMonth('created_at', ($month))->whereYear('created_at', $year);
-        }
+        $operations = $this->budget->operations();
         if ($this->category != -1)
             $operations = $operations->whereHas('category', function ($query) {
                 return $query->where('id', $this->category);
             });
 
-        $this->operations = $operations->get();
+        if ($this->period == 'prev_month') {
+            $month = $this->today->month - 1;
+            $year = $this->today->year;
+            $operations = $operations->whereMonth('created_at', ($month))->whereYear('created_at', $year)->get();
+            $chart = ReportService::generateMonthlyBalanceChartFromOperations($year, $month, clone $operations, $this->budget->id);
+            $incomeExpenseChart = ReportService::generateMonthlyIncomeAndExpenseChart($year, $month, clone $operations);
+        } else if ($this->period == 'current_year') {
+            $month = $this->today->month;
+            $year = $this->today->year;
+            $operations = $operations->whereYear('created_at', $year)->get();
+            $chart = ReportService::generateYearlyBalanceChartFromOperations($year, $month, clone $operations, $this->budget->id);
+            $incomeExpenseChart = ReportService::generateYearlyIncomeAndExpenseChart($year, $month, clone $operations);
+        } else if ($this->period == 'prev_year') {
+            $month = $this->today->month;
+            $year = $this->today->year - 1;
+            $operations = $operations->whereYear('created_at', $year)->get();
+            $chart = ReportService::generateYearlyBalanceChartFromOperations($year, $month, clone $operations, $this->budget->id);
+            $incomeExpenseChart = ReportService::generateYearlyIncomeAndExpenseChart($year, $month, clone $operations);
+        } else if ($this->period == 'all') {
+            $month = $this->today->month;
+            $year = $this->today->year;
+            $operations = $operations->get();
+            $chart = ReportService::generateAllOfTimeBalanceChartFromOperations(clone $operations, $this->budget->id);
+            $incomeExpenseChart = ReportService::generateYearlyIncomeAndExpenseChart($year, $month, clone $operations);
+        } else {
+            $month = $this->today->month;
+            $year = $this->today->year;
+            $operations = $operations->whereMonth('created_at', ($month))->whereYear('created_at', $year)->get();
+            $chart = ReportService::generateMonthlyBalanceChartFromOperations($year, $month, clone $operations, $this->budget->id);
+            $incomeExpenseChart = ReportService::generateMonthlyIncomeAndExpenseChart($year, $month, clone $operations);
+        }
+
+        $this->operations = $operations;
 
         foreach ($this->categories as $category) {
             $category->sum = 0;
@@ -65,11 +83,11 @@ class Report extends Component
                 }
             }
         }
+
+
         $this->expenses = $this->operations->where('income', false)->sum('value');
         $this->incomes = $this->operations->where('income', true)->sum('value');
         $this->dispatchBrowserEvent('contentChanged');
-        $chart = BudgetService::generateBalanceChartFromOperations($year, $month, clone $this->operations, $this->budget->id);
-        $incomeExpenseChart = BudgetService::generateIncomeAndExpenseMonthlyChart($year, $month, clone $this->operations);
         return view('livewire.reports.report',  ['chart' => $chart, 'incomeExpenseChart' => $incomeExpenseChart]);
     }
 }

@@ -13,7 +13,7 @@
                     <tr>
                         <th
                             class="w-full border-t-0 px-4 pt-2 pb-2 align-middle border-l-0 border-r-0 text-left flex flex-row flex-wrap">
-                            <img class="w-16 h-auto self-center" src="{{ asset($category->icon) }}">
+                            <img class="w-16 h-16 self-center" src="{{ asset($category->icon) }}">
                             <div class="text-sm mx-2 flex flex-col">
                                 <p class="text-gray-600 text-sm">{{$category->name}}</p>
                                 <p class="font-bold text-base">{{$category->expenses ?? 0}} PLN</p>

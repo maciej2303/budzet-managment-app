@@ -6,3 +6,7 @@
 .flatpickr-wrapper .datepicker {
     @apply w-full
 }
+
+.line-chart .apexcharts-xaxis-label:nth-child(2n) {
+    display: none;
+}

@@ -22,7 +22,7 @@ class CategoryExpenses extends Component
             else
                 $category->percentOfAllExpenses = round(abs(($category->expenses / $this->expenses * 100)), 2);
         }
-        $this->categoryExpenses = $this->categoryExpenses->sortBy('expenses');
+        $this->categoryExpenses = $this->categoryExpenses->sortByDesc('percentOfAllExpenses');
         return view('livewire.budget.category-expenses');
     }
 }

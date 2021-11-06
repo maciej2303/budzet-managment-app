@@ -33426,6 +33426,10 @@ select {
   width: 100%;
 }
 
+.line-chart .apexcharts-xaxis-label:nth-child(2n) {
+  display: none;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;

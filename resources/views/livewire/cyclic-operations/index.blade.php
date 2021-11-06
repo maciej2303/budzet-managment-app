@@ -6,9 +6,8 @@
 
 <div class="sm:py-12">
     <div name='content' class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden sm:shadow-md sm:rounded border border-gray-light">
-            <div class="mx-auto p-4 lg:p-12 rounded-2xl">
-                <p class="text-lg">Operacje cykliczne</p>
+        <div class="bg-white overflow-hidden sm:shadow-md sm:rounded border border-gray-light min-h-screen">
+            <div class="mx-auto p-4 lg:p-12 rounded-2xl overflow-x-auto">
                 <table class="table-auto">
                     <tbody>
                         @if($cyclicOperations->isNotEmpty())
@@ -37,7 +36,7 @@
                                 <span
                                     class="{{$operation->income ? 'text-green-600' : 'text-red-600'}}">{{ $operation->value }}</span>
                             </td>
-                            <td class="border px-4 py-2">{{ $operation->cyclic_date }}</td>
+                            <td class="border px-4 py-2">{{ \Carbon\Carbon::parse($operation->cyclic_date)->format('d.m.Y') }}</td>
                             <td class="border px-4 py-2">{{ $operation->user->name }}</td>
                             <td class="border px-4 py-2">
                                 <x-jet-danger-button wire:click="deleting({{ $operation->id }})"
