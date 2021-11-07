@@ -10,8 +10,12 @@
             <div class="mx-auto p-4 lg:p-12 rounded-2xl">
                 <div class="flex items-center flex-wrap">
                     <div class="w-full flex">
-                        <x-jet-input type="text" class="w-full sm:w-1/3 my-4 mr-2" name="search" wire:model='search'
-                            placeholder="Szukaj" />
+                        <select name="period" wire:model="period" id="period"
+                            class="form-select shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full sm:w-1/3 my-4 mr-2">
+                            @foreach ($periods as $key => $periodSelect)
+                            <option value="{{ $key }}" wire:key="{{$key}}">{{ $periodSelect }}</option>
+                            @endforeach
+                        </select>
                         <select name="category" type="category"
                             class="form-select shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full sm:w-1/3 my-4 mr-2"
                             x-ref="category" wire:model="category">
@@ -20,27 +24,14 @@
                             <option value="{{ $categorySelect->id }}">{{ $categorySelect->name }}</option>
                             @endforeach
                         </select>
-                        <select name="period" wire:model="period" id="period"
+                        <select name="user" type="user"
                             class="form-select shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full sm:w-1/3 my-4 mr-2"
-                            >
-                            @foreach ($periods as $key => $periodSelect)
-                            <option value="{{ $key }}" wire:key="{{$key}}">{{ $periodSelect }}</option>
+                            x-ref="user" wire:model="user">
+                            <option value="-1">Wszyscy członkowie</option>
+                            @foreach ($users as $userSelect)
+                            <option value="{{ $userSelect->id }}">{{ $userSelect->name }}</option>
                             @endforeach
                         </select>
-                        {{-- <div class="mt-4">
-                            <input
-                                class="datepickerReport shadow border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2"
-                                wire:model.lazy="dateFrom" id="dateFrom" />
-
-                            <x-jet-input-error for="dateFrom" class="mt-2" />
-                        </div>
-                        <div class="mt-4">
-                            <input
-                                class="datepickerReport shadow border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                wire:model="dateTo" id="dateTo" />
-
-                            <x-jet-input-error for="dateTo" class="mt-2" />
-                        </div> --}}
                     </div>
                 </div>
                 <div class="flex flex-wrap">
@@ -60,7 +51,8 @@
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M17 13l-5 5m0 0l-5-5m5 5V6" />
-                                </svg> Wydatki: <span class="text-red-500 ml-2">{{ number_format($expenses, 2) }} PLN</span>
+                                </svg> Wydatki: <span class="text-red-500 ml-2">{{ number_format($expenses, 2) }}
+                                    PLN</span>
                             </span>
                         </div>
                         <div class="block">
@@ -79,7 +71,8 @@
                     </div>
                     <div class="w-full md:w-2/3">
                         @if($category == -1)
-                        <div style="height: 300px !important;" class="{{($period == 'current_month' || $period == 'prev_month') ? 'line-chart' : ''}}">
+                        <div style="height: 300px !important;"
+                            class="{{($period == 'current_month' || $period == 'prev_month') ? 'line-chart' : ''}}">
                             <livewire:livewire-line-chart key="{{ $chart->reactiveKey() }}"
                                 :line-chart-model="$chart" />
                         </div>
@@ -88,10 +81,12 @@
                             <livewire:livewire-column-chart key="{{ $incomeExpenseChart->reactiveKey() }}"
                                 :column-chart-model="$incomeExpenseChart" />
                         </div>
+                        @if($categoryExpenseChart != null)
                         <div style="height: 500px !important;">
                             <livewire:livewire-pie-chart key="{{ $categoryExpenseChart->reactiveKey() }}"
                                 :pie-chart-model="$categoryExpenseChart" />
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>

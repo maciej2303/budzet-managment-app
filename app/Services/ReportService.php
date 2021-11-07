@@ -107,27 +107,58 @@ class ReportService
         $start = $firstOperation->created_at;
         $end = $lastOperation->created_at;
 
-        $period = CarbonPeriod::create($start, $end)->toArray();
-        $days = [];
+        $budgetValueOnStart = 0;
 
-        if ($operations->isEmpty()) {
-            $budgetValueOnStart = 0;
-        } else {
-            $budgetValueOnStart = $operations->first()->balance_before;
-        }
-        foreach ($period as $day) {
-            $days[$day->format('d.m.Y')] = new stdClass();
-            foreach ($operations as $key => $operation) {
-                if ($operation->created_at->format('d.m.Y') == $day->format('d.m.Y')) {
-                    $budgetValueOnStart += $operation->value;
-                    $operations->forget($key);
+        $differenceInMonths = $start->floorMonth()->diffInMonths($end->floorMonth());
+        $compartment = [];
+
+        $chart =  (new LineChartModel());
+
+        if ($differenceInMonths == 0) {
+            $period = CarbonPeriod::create($start, $end)->toArray();
+            foreach ($period as $day) {
+                $compartment[$day->format('d.m.Y')] = new stdClass();
+                foreach ($operations as $key => $operation) {
+                    if ($operation->created_at->format('d.m.Y') == $day->format('d.m.Y')) {
+                        $budgetValueOnStart += $operation->value;
+                        $operations->forget($key);
+                    }
                 }
+                $compartment[$day->format('d.m.Y')]->amount = $budgetValueOnStart;
             }
-            $days[$day->format('d.m.Y')]->amount = $budgetValueOnStart;
+            $chart->setTitle('Stan konta każdego dnia');
+        } else if ($differenceInMonths > 0 && $differenceInMonths < 13) {
+            $interval = DateInterval::createFromDateString('1 month');
+            $period = CarbonPeriod::create($start, $interval, $end)->toArray();
+            $monthsName = Months::MONTHS;
+            foreach ($period as $monthKey => $month) {
+                $compartment[$monthsName[$monthKey + 1]] = new stdClass();
+                foreach ($operations as $key => $operation) {
+                    if ($operation->created_at->format('m') == $month->month) {
+                        $budgetValueOnStart += $operation->value;
+                        $operations->forget($key);
+                    }
+                }
+                $compartment[$monthsName[$monthKey + 1]]->amount = $budgetValueOnStart;
+            }
+            $chart->setTitle('Stan konta każdego miesiąca');
+        } else {
+            $interval = DateInterval::createFromDateString('1 year');
+            $period = CarbonPeriod::create($start, $interval, $end)->toArray();
+            foreach ($period as $year) {
+                $compartment[$year->format('Y')] = new stdClass();
+                foreach ($operations as $key => $operation) {
+                    if ($operation->created_at->format('Y') == $year->year) {
+                        $budgetValueOnStart += $operation->value;
+                        $operations->forget($key);
+                    }
+                }
+                $compartment[$year->format('Y')]->amount = $budgetValueOnStart;
+            }
+            $chart->setTitle('Stan konta każdego roku');
         }
-        $chart =  (new LineChartModel())
-            ->setTitle('Stan konta każdego dnia');
-        foreach ($days as $key => $day) {
+
+        foreach ($compartment as $key => $day) {
             $chart->addPoint($key, $day->amount);
         }
 
@@ -170,7 +201,6 @@ class ReportService
 
     public static function generateYearlyIncomeAndExpenseChart($year, $month, $operations): ColumnChartModel
     {
-        Carbon::setLocale('pl');
         $start = Carbon::createFromDate($year, 1, 1)->startOfYear();
         $end = Carbon::createFromDate($year, 1, 1)->endOfYear();
         $interval = DateInterval::createFromDateString('1 month');
@@ -204,16 +234,89 @@ class ReportService
         return $incomeExpenseChart;
     }
 
-    public static function generateCategoryExpenseChart($categories): ColumnChartModel
+    public static function generateAllOfTimeIncomeAndExpenseChart($operations, $budget_id): ColumnChartModel
     {
-        
+        $firstOperation = Operation::where('budget_id', $budget_id)->orderBy('created_at', 'asc')->first();
+        if ($firstOperation == null) {
+            return new ColumnChartModel();
+        }
+        $lastOperation = Operation::where('budget_id', $budget_id)->orderBy('created_at', 'desc')->first();
+        $start = $firstOperation->created_at;
+        $end = $lastOperation->created_at;
+
+        $differenceInMonths = $start->floorMonth()->diffInMonths($end->floorMonth());
+        $compartment = [];
+
+        if ($differenceInMonths == 0) {
+            $period = CarbonPeriod::create($start, $end)->toArray();
+            foreach ($period as $day) {
+                $periodArray[] = $day->format('d.m.Y');
+                $day_income = 0;
+                $day_expense = 0;
+                $compartment[$day->format('d.m.Y')] = new stdClass();
+                foreach ($operations as $operation) {
+                    if ($operation->created_at->format('d.m.Y') == $day->format('d.m.Y')) {
+                        if ($operation->income)
+                            $day_income += $operation->value;
+                        else
+                            $day_expense += $operation->value;
+                    }
+                }
+                $compartment[$day->format('d.m.Y')]->income = $day_income;
+                $compartment[$day->format('d.m.Y')]->expense = $day_expense;
+            }
+        } else if ($differenceInMonths > 0 && $differenceInMonths < 13) {
+            $monthsName = Months::MONTHS;
+            $interval = DateInterval::createFromDateString('1 month');
+            $period = CarbonPeriod::create($start, $interval, $end)->toArray();
+            foreach ($period as $key => $month) {
+                $periodArray[] =  $monthsName[$key + 1];
+                $day_income = 0;
+                $day_expense = 0;
+                $compartment[$month->month] = new stdClass();
+                foreach ($operations as $operation) {
+                    if ($operation->created_at->format('m') == $month->month) {
+                        if ($operation->income)
+                            $day_income += $operation->value;
+                        else
+                            $day_expense += $operation->value;
+                    }
+                }
+                $compartment[$month->month]->income = $day_income;
+                $compartment[$month->month]->expense = $day_expense;
+            }
+        } else {
+            $interval = DateInterval::createFromDateString('1 year');
+            $period = CarbonPeriod::create($start, $interval, $end)->toArray();
+            foreach ($period as $year) {
+                $periodArray[] =  $year->year;
+                $day_income = 0;
+                $day_expense = 0;
+                $compartment[$year->year] = new stdClass();
+                foreach ($operations as $operation) {
+                    if ($operation->created_at->format('Y') == $year->year) {
+                        if ($operation->income)
+                            $day_income += $operation->value;
+                        else
+                            $day_expense += $operation->value;
+                    }
+                }
+                $compartment[$year->year]->income = $day_income;
+                $compartment[$year->year]->expense = $day_expense;
+            }
+        }
+
         $incomeExpenseChart =  (new ColumnChartModel())->multiColumn()->setColors(['#f52314', '#14f557'])->setXAxisCategories($periodArray)
             ->setTitle('Wykres przychodów i wydatków');
-        foreach ($days as $key => $day) {
-            $incomeExpenseChart->addSeriesColumn('Wydatek', '1.01.2021', abs($day->expense) . ' PLN');
-            $incomeExpenseChart->addSeriesColumn('Przychód', $key, $day->income . ' PLN');
+        foreach ($compartment as $key => $month) {
+            $incomeExpenseChart->addSeriesColumn('Wydatek', $key, abs($month->expense) . ' PLN');
+            $incomeExpenseChart->addSeriesColumn('Przychód', $key, $month->income . ' PLN');
         }
 
         return $incomeExpenseChart;
+    }
+
+    public static function generateCategoryExpenseChart($categories): ColumnChartModel
+    {
     }
 }

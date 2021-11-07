@@ -13,9 +13,9 @@ class Report extends Component
     public $budget;
     public $categories, $category = -1;
     public $dateFrom, $dateTo;
-    public $search;
     public $operations, $expenses, $incomes;
     public $today;
+    public $user = -1, $users;
     public $periods, $period = 'current_month';
     public function mount()
     {
@@ -25,6 +25,7 @@ class Report extends Component
         $this->dateTo = today()->lastOfMonth()->format('Y-m-d');
         $this->today = today();
         $months = Months::MONTHS;
+        $this->users = $this->budget->members;
         $this->periods = [
             'current_month' => 'Bieżący miesiąc (' . $months[$this->today->month] . ')',
             'prev_month' => 'Poprzedni miesiąc (' . $months[$this->today->month - 1] . ')',
@@ -65,7 +66,7 @@ class Report extends Component
             $year = $this->today->year;
             $operations = $operations->get();
             $chart = ReportService::generateAllOfTimeBalanceChartFromOperations(clone $operations, $this->budget->id);
-            $incomeExpenseChart = ReportService::generateYearlyIncomeAndExpenseChart($year, $month, clone $operations);
+            $incomeExpenseChart = ReportService::generateAllOfTimeIncomeAndExpenseChart(clone $operations, $this->budget->id);
         } else {
             $month = $this->today->month;
             $year = $this->today->year;
@@ -76,6 +77,8 @@ class Report extends Component
 
         $this->operations = $operations;
         $this->expenses = $this->operations->where('income', false)->sum('value');
+        $this->incomes = $this->operations->where('income', true)->sum('value');
+
         foreach ($this->categories as $category) {
             $category->sum = 0;
             $category->expenses = 0;
@@ -95,14 +98,15 @@ class Report extends Component
             else
                 $category->percentOfAllExpenses = round(abs(($category->expenses / $this->expenses * 100)), 2);
         }
+        if ($this->category == -1) {
+            $categoryExpenseChart = (new PieChartModel())->setTitle('Wykres wydatków')->withDataLabels();
+            foreach ($this->categories->sortByDesc('percentOfAllExpenses') as $category) {
+                $categoryExpenseChart->addSlice($category->name, ($category->percentOfAllExpenses), $this->rand_color());
+            }
+        } else
+            $categoryExpenseChart = null;
 
-        $categoryExpenseChart = (new PieChartModel())->setTitle('Wykres wydatków')->withDataLabels();
-        foreach ($this->categories->sortByDesc('percentOfAllExpenses') as $category) {
-            $categoryExpenseChart->addSlice($category->name, ($category->percentOfAllExpenses), $this->rand_color());
-        }
 
-        $this->expenses = $this->operations->where('income', false)->sum('value');
-        $this->incomes = $this->operations->where('income', true)->sum('value');
         $this->dispatchBrowserEvent('contentChanged');
         return view('livewire.reports.report',  [
             'chart' => $chart,

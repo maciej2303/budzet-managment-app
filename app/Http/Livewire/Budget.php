@@ -97,6 +97,7 @@ class Budget extends Component
     public function save()
     {
         $this->validate();
+        //TODO: jak dodam z wczesniejsza data to sie wywali
         $budgetId = $this->budget->id;
         if (!$this->cyclic || Carbon::parse($this->date) == today()) {
             $operation = new Operation();

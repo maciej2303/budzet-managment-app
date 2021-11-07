@@ -17,7 +17,7 @@ class OperationSeeder extends Seeder
     public function run()
     {
         $balance = 0;
-        for ($j = 50; $j > 0; $j--) {
+        for ($j = 1000; $j > 0; $j--) {
             for ($i = 0; $i < 10; $i++) {
 
                 $value = (rand(0, 1000) - 500);
