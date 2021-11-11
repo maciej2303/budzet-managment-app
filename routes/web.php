@@ -21,10 +21,6 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
-
 Route::get('/register/{budget}', [App\Http\Controllers\Auth\RegisterController::class, 'registerToBudgetForm'])->name('register.budget')->middleware('signed');
 Route::post('/register-to-budget/', [App\Http\Controllers\Auth\RegisterController::class, 'registerToBudget'])->name('register.budget_store');
 Route::post('/login-to-new-budget', [App\Http\Controllers\Auth\LoginController::class, 'loginToNewBudget'])->name('login.budget_existing_account');

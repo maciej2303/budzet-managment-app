@@ -45,7 +45,9 @@
                                 </x-jet-danger-button>
                         </tr>
                         @empty
-                        <span>Brak operacji cyklicznych</span>
+                        <h3 class="text-lg leading-6 font-medium text-red-500">Brak operacji cyklicznych</h3>
+                        <br>
+                        <span class="text-base pt-4">Aby dodać operację cykliczną należy przy dodawaniu nowej operacji zaznaczyć opcję "Cykliczna"</span>
                         @endforelse
                     </tbody>
                 </table>

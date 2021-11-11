@@ -33426,6 +33426,10 @@ select {
   width: 100%;
 }
 
+.datepicker {
+  border-radius: 0.25rem
+}
+
 .line-chart .apexcharts-xaxis-label:nth-child(2n) {
   display: none;
 }

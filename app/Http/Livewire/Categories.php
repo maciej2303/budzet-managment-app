@@ -12,10 +12,11 @@ class Categories extends Component
 {
     use WithFileUploads;
     public $creating, $deleting, $editing = false;
-    public $name, $icon, $selected_id;
+    public $name, $income, $icon, $selected_id;
 
     protected $rules = [
         'name' => 'required|max:300',
+        'income' => 'required|boolean',
         'icon' => 'required|file',
     ];
 
@@ -39,6 +40,7 @@ class Categories extends Component
         $category = new Category();
         $category->name = $this->name;
         $category->user_id = auth()->id();
+        $category->income = $this->income;
         $category->budget_id = auth()->user()->budget->id;
         if ($this->icon) {
             $image_path = $this->icon->store('/public/images/categories');
@@ -84,6 +86,7 @@ class Categories extends Component
         ]);
         $category = Category::find($this->selected_id);
         $category->name = $this->name;
+        $category->income = $this->income;
         if ($this->icon) {
             Storage::delete(str_replace('storage/', 'public/', $category->icon));
             $image_path = $this->icon->store('/public/images/categories');
@@ -100,6 +103,7 @@ class Categories extends Component
     {
         $this->name = '';
         $this->icon = '';
+        $this->income = false;
         $this->resetErrorBag();
         $this->selected_id = null;
     }

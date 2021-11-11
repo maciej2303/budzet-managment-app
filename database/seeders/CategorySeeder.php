@@ -33,6 +33,24 @@ class CategorySeeder extends Seeder
                 'name' => $category[0],
                 'icon' => $category[1],
                 'default' => 1,
+                'income' => 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        $income_categories = [
+            ['Pensja', '/images/category-icons/salary-icon.png'],
+            ['Oszczędności', '/images/category-icons/savings-icon.png'],
+            ['Handel', '/images/category-icons/trade-icon.png'],
+        ];
+
+        foreach ($income_categories as $category) {
+            DB::table('categories')->insert([
+                'name' => $category[0],
+                'icon' => $category[1],
+                'default' => 1,
+                'income' => 0,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

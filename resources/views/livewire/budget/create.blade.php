@@ -10,16 +10,15 @@
             <x-slot name="content">
                 <div class="mt-4 w-full">
                 <select name="income" type="income"
-                            class="form-select shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-1 block w-3/4"
                             x-ref="income" wire:model="income">
                             <option value="0">Wydatek</option>
                             <option value="1">Przychód</option>
                         </select>
                 </div>
-
                 <div class="mt-4">
                 <x-jet-label for="name" value="{{ __('Nazwa') }}" />
-                    <x-jet-input type="name" class="mt-1 block w-3/4"
+                    <x-jet-input type="name" class="mt-1 block w-3/4 {{$errors->has('name') ? 'border-red-500' : ''}}"
                                 x-ref="name"
                                 wire:model.defer="name"
                                 wire:keydown.enter="save" />
@@ -29,7 +28,7 @@
 
                 <div class="mt-4">
                 <x-jet-label for="value" value="{{ __('Kwota') }}" />
-                    <x-jet-input type="value" class="mt-1 block w-3/4"
+                    <x-jet-input type="value" class="mt-1 block w-3/4 {{$errors->has('value') ? 'border-red-500' : ''}}"
                                 x-ref="value"
                                 wire:model.defer="value"
                                 wire:keydown.enter="save" />
@@ -46,7 +45,7 @@
 
                 <div class="mt-4" >
                 <x-jet-label for="image" value="{{ __('Opis') }}" />
-                    <x-jet-input type="description" class="mt-1 block w-3/4"
+                    <x-jet-input type="description" class="mt-1 block w-3/4 {{$errors->has('description') ? 'border-red-500' : ''}}"
                                 x-ref="description"
                                 wire:model.defer="description"
                                 wire:keydown.enter="save" />
@@ -56,7 +55,7 @@
 
                 <div class="mt-4" >
                 <x-jet-label for="category_id" value="{{ __('Kategoria') }}" />
-                    <select name="" type="category_id" class="mt-1 block w-full"
+                    <select name="" type="category_id" class="mt-1 block w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-1 block w-3/4"
                         x-ref="category_id"
                         wire:model="category_id">
                         @foreach ($categories as $category)
@@ -69,7 +68,7 @@
 
                 <div class="mt-4" >
                 <x-jet-label for="image" value="{{ __('Plik (Opcjonalne)') }}" />
-                    <x-jet-input type="file" class="mt-1 block w-3/4" wire:model.defer="image"
+                    <x-jet-input type="file" class="mt-1 block w-3/4 {{$errors->has('image') ? 'border-red-500' : ''}}" wire:model.defer="image"
                         wire:keydown.enter="save" />
 
                     <x-jet-input-error for="image" class="mt-2" />

@@ -7,6 +7,10 @@
     @apply w-full
 }
 
+.datepicker {
+    @apply rounded
+}
+
 .line-chart .apexcharts-xaxis-label:nth-child(2n) {
     display: none;
 }
