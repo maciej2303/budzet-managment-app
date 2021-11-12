@@ -80,12 +80,10 @@ class Report extends Component
         $this->incomes = $this->operations->where('income', true)->sum('value');
 
         foreach ($this->categories as $category) {
-            $category->sum = 0;
             $category->expenses = 0;
             $category->incomes = 0;
             foreach ($this->operations as $operation) {
                 if ($category->id == $operation->category_id) {
-                    $category->sum += $operation->value;
                     if ($operation->income) {
                         $category->incomes += $operation->value;
                     } else {

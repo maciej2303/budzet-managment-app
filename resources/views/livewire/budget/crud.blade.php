@@ -143,8 +143,8 @@
                                         class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500">
                                     </div>
                                 </div>
-                                Wydano: {{number_format(abs($budget->currentMonthExpenses()),2)}} /
-                                {{number_format($budget->threshold, 2)}}
+                                Wydano: {{number_format(abs($budget->currentMonthExpenses()),2)}} PLN /
+                                {{number_format($budget->threshold, 2)}} PLN
                                 @endif
                             </div>
 

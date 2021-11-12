@@ -55,19 +55,6 @@
                                     PLN</span>
                             </span>
                         </div>
-                        <div class="block">
-                            @foreach ($categories as $categoryDisplay)
-                            @if($categoryDisplay->sum != 0)
-                            <div class="flex mx-6 py-4 flex-row flex-wrap">
-                                <img class="w-12 h-auto p-2 mx-2 self-center" src="{{ asset($categoryDisplay->icon) }}">
-                                <div class="text-sm mx-2 flex flex-col">
-                                    <p class="">{{$categoryDisplay->name}}</p>
-                                    <p class="font-bold">{{ $categoryDisplay->sum }} PLN</p>
-                                </div>
-                            </div>
-                            @endif
-                            @endforeach
-                        </div>
                     </div>
                     <div class="w-full md:w-2/3">
                         @if($category == -1)

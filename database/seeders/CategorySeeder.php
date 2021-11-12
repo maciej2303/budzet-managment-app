@@ -50,7 +50,7 @@ class CategorySeeder extends Seeder
                 'name' => $category[0],
                 'icon' => $category[1],
                 'default' => 1,
-                'income' => 0,
+                'income' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

@@ -76,7 +76,7 @@
                 <div class="mt-4">
                     <label class="inline-flex items-center">
                         <input type="checkbox" class="form-checkbox" wire:model="cyclic">
-                        <span class="ml-2">Cykliczny</span>
+                        <span class="ml-2">Cykliczna</span>
                     </label>
                     @if($cyclic)
                     <x-jet-label for="frequency" value="{{ __('Częstotliwość') }}" />
