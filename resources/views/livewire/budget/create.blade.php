@@ -58,7 +58,7 @@
                     <select name="" type="category_id" class="mt-1 block w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-1 block w-3/4"
                         x-ref="category_id"
                         wire:model="category_id">
-                        @foreach ($categories as $category)
+                        @foreach ($categories->where('income', $income) as $category)
                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                         @endforeach
                     </select>

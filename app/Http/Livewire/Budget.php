@@ -97,7 +97,6 @@ class Budget extends Component
     public function save()
     {
         $this->validate();
-        //TODO: jak dodam z wczesniejsza data to sie wywali
         $budgetId = $this->budget->id;
         if (!$this->cyclic || Carbon::parse($this->date) == today()) {
             $operation = new Operation();
@@ -118,6 +117,13 @@ class Budget extends Component
 
             $operation->created_at =  Carbon::parse($this->date) == today() ? now() : Carbon::parse($this->date);
             $operation->save();
+
+            //Dodanie wartości do pózniejszych pól
+            $operations = $this->budget->operations()->where('created_at', '>', $operation->created_at)->get();
+            foreach ($operations as $old_operation) {
+                $old_operation->balance_before += $operation->value;
+                $old_operation->save();
+            }
 
             $this->budget->balance += (float)$this->value;
             $this->budget->save();

@@ -90,7 +90,7 @@
                                     </svg>
                                 </div>
                             </div>
-                            <div class="block w-full overflow-x-auto" style="max-height: 600px">
+                            <div class="block w-full overflow-x-auto" style="max-height: 580px">
                                 <table class="items-center w-full bg-transparent border-collapse">
                                     <tbody>
                                         @forelse ($operations as $operation)

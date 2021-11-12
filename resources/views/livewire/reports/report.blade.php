@@ -9,15 +9,15 @@
         <div class="bg-white sm:shadow-md sm:rounded border border-gray-light">
             <div class="mx-auto p-4 lg:p-12 rounded-2xl">
                 <div class="flex items-center flex-wrap">
-                    <div class="w-full flex">
+                    <div class="w-full">
                         <select name="period" wire:model="period" id="period"
-                            class="form-select shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full sm:w-1/3 my-4 mr-2">
+                            class="form-select shadow appearance-none border rounded w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full sm:w-1/4 mr-4 my-1">
                             @foreach ($periods as $key => $periodSelect)
                             <option value="{{ $key }}" wire:key="{{$key}}">{{ $periodSelect }}</option>
                             @endforeach
                         </select>
                         <select name="category" type="category"
-                            class="form-select shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full sm:w-1/3 my-4 mr-2"
+                            class="form-select shadow appearance-none border rounded w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full sm:w-1/4 mr-4 my-1"
                             x-ref="category" wire:model="category">
                             <option value="-1">Wybierz kategorię</option>
                             @foreach ($categories as $categorySelect)
@@ -25,7 +25,7 @@
                             @endforeach
                         </select>
                         <select name="user" type="user"
-                            class="form-select shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full sm:w-1/3 my-4 mr-2"
+                            class="form-select shadow appearance-none border rounded w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full sm:w-1/4 my-1"
                             x-ref="user" wire:model="user">
                             <option value="-1">Wszyscy członkowie</option>
                             @foreach ($users as $userSelect)
@@ -34,6 +34,7 @@
                         </select>
                     </div>
                 </div>
+
                 <div class="flex flex-wrap">
                     <div class="w-full md:w-1/3">
                         <div class="mt-2">
@@ -56,29 +57,30 @@
                             </span>
                         </div>
                     </div>
-                    <div class="w-full md:w-2/3">
-                        @if($category == -1)
-                        <div style="height: 300px !important;"
-                            class="{{($period == 'current_month' || $period == 'prev_month') ? 'line-chart' : ''}}">
-                            <livewire:livewire-line-chart key="{{ $chart->reactiveKey() }}"
-                                :line-chart-model="$chart" />
-                        </div>
-                        @endif
-                        <div style="height: 300px !important;">
-                            <livewire:livewire-column-chart key="{{ $incomeExpenseChart->reactiveKey() }}"
-                                :column-chart-model="$incomeExpenseChart" />
-                        </div>
-                        @if($categoryExpenseChart != null)
-                        <div style="height: 500px !important;">
-                            <livewire:livewire-pie-chart key="{{ $categoryExpenseChart->reactiveKey() }}"
-                                :pie-chart-model="$categoryExpenseChart" />
-                        </div>
-                        @endif
+                </div>
+                <div class="pt-2">
+                    @if($category == -1)
+                    <div style="height: 300px !important;"
+                        class="{{($period == 'current_month' || $period == 'prev_month') ? 'line-chart' : ''}}">
+                        <livewire:livewire-line-chart key="{{ $chart->reactiveKey() }}" :line-chart-model="$chart" />
                     </div>
+                    @endif
+                    <div style="height: 300px !important;" class="p52">
+                        <p class="text-center font-black" style="font-size: 14px">Wykres przychodów i wydatków</p>
+                        <livewire:livewire-column-chart key="{{ $incomeExpenseChart->reactiveKey() }}"
+                            :column-chart-model="$incomeExpenseChart" />
+                    </div>
+                    @if($categoryExpenseChart != null)
+                    <div style="height: 500px !important;" class="pt-6">
+                        <livewire:livewire-pie-chart key="{{ $categoryExpenseChart->reactiveKey() }}"
+                            :pie-chart-model="$categoryExpenseChart" />
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 @push('js')
 <script src="{{asset('js/budget/datepicker.js')}}"></script>

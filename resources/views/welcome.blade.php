@@ -15,6 +15,11 @@
             .mt-20 {
                 margin-top: 5rem;
             }
+            @media screen and (min-width:600px) {
+                .mt-20 {
+                    margin-top: 0;
+                }
+            }
         </style>
 
         <style>
@@ -41,7 +46,7 @@
             @endif
 
             <div class="sm:px-6 lg:px-8">
-                <div class="mt-20 sm:mt-8 overflow-hidden sm:rounded-lg">
+                <div class="mt-20 sm:mt-0 overflow-hidden sm:rounded-lg">
                         <div class="px-6"  style="color: white">
                             <h3 class="text-xl text-white">Witaj, w aplikacji do zarządzania budżetem domowym całą rodziną</h3>
                             <p class="text-base text-white">Zarejestruj się lub zaloguj się do istniejącego konta aby przejść do aplikacji</p>

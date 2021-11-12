@@ -6,10 +6,10 @@
                     kategorię</h2>
             </div>
         </div>
-        <div class="block w-full overflow-x-auto" style="max-height: 310px">
+        <div class="block w-full overflow-x-auto" style="max-height: 320px">
             <table class="items-center w-full bg-transparent border-collapse">
                 <tbody>
-                    @foreach ($categoryExpenses as $category)
+                    @foreach ($categoryExpenses->where('income', 0) as $category)
                     <tr>
                         <th
                             class="w-full border-t-0 px-4 pt-2 pb-2 align-middle border-l-0 border-r-0 text-left flex flex-row flex-wrap">
