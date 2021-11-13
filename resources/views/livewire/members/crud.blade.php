@@ -33,10 +33,12 @@
                                         <td class="border px-4 py-2">{{ $member->email }}</td>
                                         <td class="border px-4 py-2">
                                             <div class="flex justify-center">
+                                                @if($member->id != auth()->id())
                                                 <x-jet-danger-button wire:click="deleting({{ $member->id }})"
                                                     wire:loading.attr="disabled">
                                                     {{ __('Usuń') }}
                                                 </x-jet-danger-button>
+                                                @endif
                                             </div>
 
                                         </td>

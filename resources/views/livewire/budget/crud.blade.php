@@ -23,16 +23,16 @@
                                         </svg>
                                     </div>
 
-                                    <div class="w-1/2 overflow-hidden flex justify-center items-center">
+                                    <div class="w-1/2 flex justify-center items-center">
                                         <div class="text-center">
                                             <p class="m-0">{{$months[$month]}}</p>
                                             <p class="text-xs">{{$year}}</p>
-                                            <p class="font-bold text-xl">{{ number_format($budget->balance, 2) }}</p>
+                                            <p class="font-bold text-xl">{{ number_format($budget->balance, 2) }} PLN
+                                            </p>
                                         </div>
                                     </div>
 
-                                    <div class="w-1/4 overflow-hidden flex justify-end items-center"
-                                        wire:click="nextMonth">
+                                    <div class="w-1/4 flex justify-end items-center" wire:click="nextMonth">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -42,8 +42,8 @@
                                 </div>
                                 {{-- Sekcja miesięczna --}}
                                 {{-- Sekcja przychodow i wydatkow --}}
-                                <div class="flex flex-wrap overflow-hidden pt-4">
-                                    <div class="w-1/2 overflow-hidden flex justify-center">
+                                <div class="flex flex-wrap  pt-4">
+                                    <div class="w-1/2 flex justify-center px-1">
                                         <div>
                                             <p class="flex">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500"
@@ -53,13 +53,13 @@
                                                 </svg>
                                                 Przychód:
                                             </p>
-                                            <p class="text-green-500">
+                                            <p class="text-green-500 px-2">
                                                 {{ number_format($incomes, 2) }}
-                                                zł</p>
+                                                PLN</p>
                                         </div>
                                     </div>
 
-                                    <div class="w-1/2 overflow-hidden flex justify-center">
+                                    <div class="w-1/2 overflow-hidden flex justify-center px-1">
                                         <div>
                                             <p class="flex">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500"
@@ -68,9 +68,9 @@
                                                         stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
                                                 </svg> Wydatki:
                                             </p>
-                                            <p class="text-red-500">
+                                            <p class="text-red-500 px-2">
                                                 {{ number_format($expenses, 2) }}
-                                                zł
+                                                PLN
                                             </p>
                                         </div>
 
@@ -102,7 +102,10 @@
                                                 <img class="w-16 h-auto self-center"
                                                     src="{{ asset($operation->category->icon) }}">
                                                 <div class="text-sm mx-2 flex flex-col">
-                                                    <p class="font-bold text-lg">{{ $operation->name}}</p>
+                                                    <p class="font-bold text-lg overflow-hidden"
+                                                        style="inline-size: 100px; overflow-wrap: break-word; text-overflow: ellipsis;">
+                                                        {{ $operation->name}}
+                                                    </p>
                                                     <p class="text-xs">{{$operation->category->name}}</p>
                                                     <p class="text-xs">{{$operation->created_at->format('d.m.Y H:i')}}
                                                     </p>
@@ -118,7 +121,7 @@
                                             </td>
                                         </tr>
                                         @empty
-                                                <p class="px-4">Brak operacji</p>
+                                        <p class="px-4">Brak operacji</p>
                                         @endforelse
                                     </tbody>
                                 </table>
@@ -170,7 +173,8 @@
                         {{-- Miesięczne statystyki --}}
 
                         {{-- Wydatki na kategorię --}}
-                        @livewire('budget.category-expenses', ['categoryExpenses' => $categoryExpenses, 'operations' => $operations, 'expenses' => $expenses], key('month'.$month.'year='.$year))
+                        @livewire('budget.category-expenses', ['categoryExpenses' => $categoryExpenses, 'operations' =>
+                        $operations, 'expenses' => $expenses], key('month'.$month.'year='.$year))
                         {{-- Wydatki na kategorię --}}
                     </div>
                 </div>
@@ -180,7 +184,7 @@
     @include('livewire.budget.create')
     @include('livewire.budget.showOperation')
     @include('livewire.budget.threshold')
-        @include('livewire.budget.delete')
+    @include('livewire.budget.delete')
 </div>
 @push('js')
 <script>

@@ -43,15 +43,24 @@
                                             </div>
                                         </td>
                                         <td class="border px-4 py-2">
-                                            <div class="flex justify-center">
+                                            <div class="flex justify-center flex-wrap">
+                                                @if(auth()->user()->ownedBudget != null)
                                                 <x-jet-button wire:click="editing({{ $category->id }})" class="mr-3"
                                                     wire:loading.attr="disabled">
                                                     {{ __('Edytuj') }}
                                                 </x-jet-button>
-                                                <x-jet-danger-button wire:click="deleting({{ $category->id }})"
-                                                    wire:loading.attr="disabled">
-                                                    {{ __('Usuń') }}
-                                                </x-jet-danger-button>
+                                                @endif
+                                                @if($category->operations->isEmpty())
+                                                    @if((auth()->id() == $category->user_id || auth()->user()->ownedBudget != null))
+                                                    <x-jet-danger-button wire:click="deleting({{ $category->id }})"
+                                                        wire:loading.attr="disabled">
+                                                        {{ __('Usuń') }}
+                                                    </x-jet-danger-button>
+                                                    @endif
+                                                @else
+                                                    <div class="break w-full"></div>
+                                                    <p class="text-base text-red-600 pt-2">Kategorii nie można usunąć ponieważ posiada dodane operację</p>
+                                                @endif
                                             </div>
 
                                         </td>

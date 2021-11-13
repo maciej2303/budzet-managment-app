@@ -28,7 +28,7 @@ class OperationSeeder extends Seeder
                     'description' => 'test',
                     'income' => $income,
                     'user_id' => '1',
-                    'category_id' => rand(1, Category::get()->count()),
+                    'category_id' => (Category::where('income', $income)->inRandomOrder()->first())->id,
                     'budget_id' => '1',
                     'created_at' => now()->subDay($j),
                     'updated_at' => now()->subDay($j),

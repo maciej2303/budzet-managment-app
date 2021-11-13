@@ -7,7 +7,7 @@
             </x-slot>
 
             <x-slot name="content">
-                {{ __('Na pewno?') }}
+                {{ __('Z powoduje to usunięcie dostępu tego użytkownika do Twojego budżetu. Kategorie i opercje dodane przez tego użytkownika zostaną w systemie') }}
             </x-slot>
 
             <x-slot name="footer">

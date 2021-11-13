@@ -13,7 +13,8 @@
                     <p>Nazwa operacji: {{$operationOnModal->name ?? ''}}</p>
                     <p>
                         {{$operationOnModal->value > 0 ? "PRZYCHÓD:" : "WYDATEK:"}}
-                        <span class="font-bold text-base {{$operationOnModal->value > 0 ? 'text-green-600' : 'text-red-600'}}">
+                        <span
+                            class="font-bold text-base {{$operationOnModal->value > 0 ? 'text-green-600' : 'text-red-600'}}">
                             {{ $operationOnModal->value}} PLN</span>
                     </p>
                     <p>Dodano: {{$operationOnModal->created_at->format('d.m.Y') ?? ''}}</p>
@@ -24,7 +25,8 @@
                     <p>Plik: </p>
                     @if (@is_array(getimagesize($operationOnModal->image)))
                     <div class="flex justify-center">
-                    <img class="object-scale-down" style="max-width: 300px" src="{{ asset($operationOnModal->image) }}">
+                        <img class="object-scale-down" style="max-width: 300px"
+                            src="{{ asset($operationOnModal->image) }}">
                     </div>
                     @endif
                     <a href="{{asset($operationOnModal->image)}}" class="flex justify-center pt-2">
@@ -43,11 +45,11 @@
                 <x-jet-secondary-button wire:click="$toggle('showOperation')" wire:loading.attr="disabled">
                     {{ __('Zamknij') }}
                 </x-jet-secondary-button>
-                @if($operationOnModal != null)
-                <x-jet-danger-button wire:click="deleting({{ $operationOnModal->id }})"
-                                    wire:loading.attr="disabled">
-                                    {{ __('Usuń') }}
-                                </x-jet-danger-button>
+                @if($operationOnModal != null && (auth()->id() == $operation->user_id || auth()->user()->ownedBudget !=
+                null))
+                <x-jet-danger-button wire:click="deleting({{ $operationOnModal->id }})" wire:loading.attr="disabled">
+                    {{ __('Usuń') }}
+                </x-jet-danger-button>
                 @endif
             </x-slot>
         </x-jet-dialog-modal>

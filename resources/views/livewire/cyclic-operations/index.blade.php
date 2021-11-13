@@ -36,10 +36,12 @@
                                             {{ \Carbon\Carbon::parse($operation->cyclic_date)->format('d.m.Y') }}</td>
                                         <td class="border px-4 py-2">{{ $operation->user->name }}</td>
                                         <td class="border px-4 py-2">
+                                            @if(auth()->user()->ownedBudget != null)
                                             <x-jet-danger-button wire:click="deleting({{ $operation->id }})"
                                                 wire:loading.attr="disabled">
                                                 {{ __('Usuń') }}
                                             </x-jet-danger-button>
+                                            @endif
                                         </td>
                                     </tr>
                                     @empty

@@ -13,4 +13,9 @@ class Category extends Model
     {
         return $this->where('default', 1);
     }
+
+    public function operations()
+    {
+        return $this->hasMany(Operation::class);
+    }
 }

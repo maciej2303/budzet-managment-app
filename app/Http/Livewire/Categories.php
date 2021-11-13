@@ -15,7 +15,7 @@ class Categories extends Component
     public $name, $income, $icon, $selected_id;
 
     protected $rules = [
-        'name' => 'required|max:300',
+        'name' => 'required|max:100',
         'income' => 'required|boolean',
         'icon' => 'required|file',
     ];
@@ -58,9 +58,9 @@ class Categories extends Component
         $this->deleting = true;
     }
 
-    public function destroy()
+    public function destroy($selected_id)
     {
-        $category = Category::find($this->selected_id);
+        $category = Category::find($selected_id);
         Storage::delete(str_replace('storage/', 'public/', $category->icon));
         $category->delete();
         $this->selected_id = null;
