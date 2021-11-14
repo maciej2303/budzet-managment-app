@@ -165,7 +165,7 @@ class ReportService
         return $chart;
     }
 
-    public static function generateMonthlyIncomeAndExpenseChart($year, $month, $operations): ColumnChartModel
+    public static function generateMonthlyIncomeAndExpenseChart($year, $month, $operations, $expense = true): ColumnChartModel
     {
         $start = Carbon::createFromDate($year, $month)->startOfMonth();
         $end = Carbon::createFromDate($year, $month)->endOfMonth();

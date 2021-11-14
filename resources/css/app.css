@@ -15,6 +15,12 @@
     display: none;
 }
 
+@media (max-width: 640px) {
+    .line-chart .apexcharts-xaxis-label:nth-child(3n) {
+        display: none;
+    }
+}
+
 .glassmorphism-dark {
     background: radial-gradient(126.01% 146.21% at 12.14% 10.98%,
             rgba(55, 65, 73, 0.7) 0%,

@@ -95,21 +95,33 @@ class Report extends Component
                 $category->percentOfAllExpenses = 0;
             else
                 $category->percentOfAllExpenses = round(abs(($category->expenses / $this->expenses * 100)), 2);
+
+            if ($this->incomes == 0)
+                $category->percentOfAllIncomes = 0;
+            else
+                $category->percentOfAllIncomes = round(abs(($category->incomes / $this->incomes * 100)), 2);
         }
         if ($this->category == -1) {
-            $categoryExpenseChart = (new PieChartModel())->setTitle('Wykres wydatków')->withDataLabels();
-            foreach ($this->categories->sortByDesc('percentOfAllExpenses') as $category) {
+            $categoryExpenseChart = (new PieChartModel())->setTitle('Wykres podziału wydatków')->withDataLabels();
+            $categoryIncomeChart = (new PieChartModel())->setTitle('Wykres podziału przychodów')->withDataLabels();
+            foreach ($this->categories->where('income', 0)->sortByDesc('percentOfAllExpenses') as $category) {
                 $categoryExpenseChart->addSlice($category->name, ($category->percentOfAllExpenses), $this->rand_color());
             }
-        } else
+            foreach ($this->categories->where('income', 1)->sortByDesc('percentOfAllExpenses') as $category) {
+                $categoryIncomeChart->addSlice($category->name, ($category->percentOfAllIncomes), $this->rand_color());
+            }
+        } else {
+            $categoryIncomeChart = null;
             $categoryExpenseChart = null;
+        }
 
 
         $this->dispatchBrowserEvent('contentChanged');
         return view('livewire.reports.report',  [
             'chart' => $chart,
             'incomeExpenseChart' => $incomeExpenseChart,
-            'categoryExpenseChart' => $categoryExpenseChart
+            'categoryExpenseChart' => $categoryExpenseChart,
+            'categoryIncomeChart' => $categoryIncomeChart,
         ]);
     }
 

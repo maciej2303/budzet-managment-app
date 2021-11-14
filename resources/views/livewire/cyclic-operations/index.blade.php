@@ -9,7 +9,7 @@
         <div class="bg-white overflow-hidden sm:shadow-md sm:rounded border border-gray-light min-h-screen">
             <div class="mx-auto p-4 lg:p-12 rounded-2xl overflow-x-auto">
                 <section class="container mx-auto pt-4">
-                    <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
+                    <div class="w-full mb-8 overflow-hidden rounded-lg sm:shadow-lg">
                         <div class="w-full overflow-x-auto">
                             <table class="w-full">
                                 <thead class="text-center">
@@ -45,11 +45,13 @@
                                         </td>
                                     </tr>
                                     @empty
-                                    <h3 class="text-lg leading-6 font-medium text-red-500">Brak operacji cyklicznych
-                                    </h3>
-                                    <br>
-                                    <span class="text-base pt-4">Aby dodać operację cykliczną należy przy dodawaniu
-                                        nowej operacji zaznaczyć opcję "Cykliczna"</span>
+                                    <div class="p-2">
+                                        <h3 class="text-lg leading-6 font-medium text-red-500">Brak operacji cyklicznych
+                                        </h3>
+                                        <br>
+                                        <span class="text-base pt-4">Aby dodać operację cykliczną należy przy dodawaniu
+                                            nowej operacji zaznaczyć opcję "Cykliczna"</span>
+                                    </div>
                                     @endforelse
                                 </tbody>
                             </table>

@@ -38,16 +38,17 @@
                 <div class="flex flex-wrap">
                     <div class="w-full md:w-1/3">
                         <div class="mt-2">
-                            <p class="pl-6">Saldo konta: {{ number_format($budget->balance, 2) }} PLN</p>
-                            <span class="flex">
+                            <p class="pl-6 flex justify-center sm:justify-start">Saldo konta: {{ number_format($budget->balance, 2) }} PLN</p>
+                            <span class="flex justify-center sm:justify-start">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M7 11l5-5m0 0l5 5m-5-5v12" />
                                 </svg>
                                 Przychód:
-                                <span class="text-green-500 ml-2">{{ number_format($incomes, 2) }} PLN</span></span>
-                            <span class="flex">
+                                <span class="text-green-500 ml-2">{{ number_format($incomes, 2) }} PLN</span>
+                            </span>
+                            <span class="flex justify-center sm:justify-start">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -76,12 +77,67 @@
                             :pie-chart-model="$categoryExpenseChart" />
                     </div>
                     @endif
+                    @if($categoryIncomeChart != null)
+                    <div style="height: 500px !important;" class="pt-6">
+                        <livewire:livewire-pie-chart key="{{ $categoryIncomeChart->reactiveKey() }}"
+                            :pie-chart-model="$categoryIncomeChart" />
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
 </div>
+<div
+    x-data="{ loading: false }"
+    x-show="loading"
+    @loading.window="loading = $event.detail.loading"
+>
+    <style>
+        .loader {
+            border-top-color: #3498db;
+            -webkit-animation: spinner 1.5s linear infinite;
+            animation: spinner 1.5s linear infinite;
+        }
+
+        @-webkit-keyframes spinner {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spinner {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <div
+        class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center">
+        <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
+        <h2 class="text-center text-white dark:text-fuchsia-600 text-xl font-semibold">Trwa ładowanie raportów....</h2>
+    </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        this.livewire.hook('message.sent', () => {
+            window.dispatchEvent(
+                new CustomEvent('loading', { detail: { loading: true }})
+            );
+        } )
+        this.livewire.hook('message.processed', (message, component) => {
+            window.dispatchEvent(
+                new CustomEvent('loading', { detail: { loading: false }})
+            );
+        })
+    });
+</script>
 @push('js')
 <script src="{{asset('js/budget/datepicker.js')}}"></script>
 @endpush
