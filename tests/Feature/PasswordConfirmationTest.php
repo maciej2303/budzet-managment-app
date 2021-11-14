@@ -22,17 +22,17 @@ class PasswordConfirmationTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_password_can_be_confirmed()
-    {
-        $user = User::factory()->create();
+    // public function test_password_can_be_confirmed()
+    // {
+    //     $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->post('/user/confirm-password', [
-            'password' => 'password',
-        ]);
+    //     $response = $this->actingAs($user)->post('/user/confirm-password', [
+    //         'password' => 'password',
+    //     ]);
 
-        $response->assertRedirect();
-        $response->assertSessionHasNoErrors();
-    }
+    //     $response->assertRedirect();
+    //     $response->assertSessionHasNoErrors();
+    // }
 
     public function test_password_is_not_confirmed_with_invalid_password()
     {
