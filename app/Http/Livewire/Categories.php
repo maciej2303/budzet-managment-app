@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Category;
+use Exception;
 use Livewire\Component;
 use Livewire\ComponentConcerns\ValidatesInput;
 use Livewire\WithFileUploads;
@@ -61,8 +62,12 @@ class Categories extends Component
     public function destroy($selected_id)
     {
         $category = Category::find($selected_id);
-        Storage::delete(str_replace('storage/', 'public/', $category->icon));
-        $category->delete();
+        try {
+            $category->delete();
+            Storage::delete(str_replace('storage/', 'public/', $category->icon));
+        } catch (Exception $e) {
+            $this->addError('delete', 'Kategorii nie da się usunąć, posiada operację.');
+        }
         $this->selected_id = null;
         $this->deleting = false;
         $this->resetInputs();

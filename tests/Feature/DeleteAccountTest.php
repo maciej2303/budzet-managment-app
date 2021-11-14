@@ -19,7 +19,7 @@ class DeleteAccountTest extends TestCase
             return $this->markTestSkipped('Account deletion is not enabled.');
         }
 
-        $this->actingAs($user = User::factory()->create());
+        $this->actingAs(User::factory()->create());
         Livewire::test(DeleteUserForm::class)
             ->set('password', 'password')
             ->call('deleteUser');
@@ -33,7 +33,7 @@ class DeleteAccountTest extends TestCase
             return $this->markTestSkipped('Account deletion is not enabled.');
         }
 
-        $this->actingAs($user = User::factory()->create());
+        $this->actingAs(User::factory()->create());
 
         Livewire::test(DeleteUserForm::class)
                         ->set('password', 'wrong-password')
