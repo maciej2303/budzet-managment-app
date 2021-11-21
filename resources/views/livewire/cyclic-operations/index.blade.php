@@ -9,7 +9,7 @@
         <div class="bg-white overflow-hidden sm:shadow-md sm:rounded border border-gray-light min-h-screen">
             <div class="mx-auto p-4 lg:p-12 rounded-2xl overflow-x-auto">
                 <section class="container mx-auto pt-4">
-                    <div class="w-full mb-8 overflow-hidden rounded-lg sm:shadow-lg">
+                    <div class="w-full mb-8 overflow-hidden rounded-lg {{$cyclicOperations->isNotEmpty() ?  'sm:shadow-lg' : ''}}">
                         <div class="w-full overflow-x-auto">
                             <table class="w-full">
                                 <thead class="text-center">

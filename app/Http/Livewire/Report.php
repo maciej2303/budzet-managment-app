@@ -43,6 +43,11 @@ class Report extends Component
                 return $query->where('id', $this->category);
             });
 
+        if ($this->user != -1)
+            $operations = $operations->whereHas('user', function ($query) {
+                return $query->where('id', $this->user);
+            });
+
         if ($this->period == 'prev_month') {
             $month = $this->today->month - 1;
             $year = $this->today->year;
@@ -78,7 +83,7 @@ class Report extends Component
         $this->operations = $operations;
         $this->expenses = $this->operations->where('income', false)->sum('value');
         $this->incomes = $this->operations->where('income', true)->sum('value');
-
+        
         foreach ($this->categories as $category) {
             $category->expenses = 0;
             $category->incomes = 0;
@@ -107,6 +112,7 @@ class Report extends Component
             foreach ($this->categories->where('income', 0)->sortByDesc('percentOfAllExpenses') as $category) {
                 $categoryExpenseChart->addSlice($category->name, ($category->percentOfAllExpenses), $this->rand_color());
             }
+
             foreach ($this->categories->where('income', 1)->sortByDesc('percentOfAllExpenses') as $category) {
                 $categoryIncomeChart->addSlice($category->name, ($category->percentOfAllIncomes), $this->rand_color());
             }

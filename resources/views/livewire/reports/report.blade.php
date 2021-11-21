@@ -60,7 +60,7 @@
                     </div>
                 </div>
                 <div class="pt-2">
-                    @if($category == -1)
+                    @if($category == -1 && $user == -1)
                     <div style="height: 300px !important;"
                         class="{{($period == 'current_month' || $period == 'prev_month') ? 'line-chart' : ''}}">
                         <livewire:livewire-line-chart key="{{ $chart->reactiveKey() }}" :line-chart-model="$chart" />
