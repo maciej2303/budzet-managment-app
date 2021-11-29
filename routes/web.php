@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CyclicOperationController;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,3 +36,5 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::view('/members', 'livewire.members.show')->name('members.index');
     Route::view('/reports', 'livewire.reports.show')->name('reports.index');
 });
+
+Route::get('/cron', [CyclicOperationController::class, 'cron']);

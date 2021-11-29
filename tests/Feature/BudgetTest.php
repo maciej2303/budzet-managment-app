@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Constants\Frequency;
 use App\Http\Livewire\Budget;
 use App\Http\Livewire\Categories;
 use App\Models\Category;
@@ -89,5 +90,31 @@ class BudgetTest extends TestCase
 
         $user->refresh();
         $this->assertEquals(5000.00, $user->budget->threshold);
+    }
+
+    public function test_cyclic_operations_working()
+    {
+        $user = User::first();
+        $this->actingAs($user);
+        $category = Category::where('income', 0)->first();
+
+        $budgetBalance = $user->budget->balance;
+        Livewire::test(Budget::class)
+            ->set('name', 'Wydatek test')
+            ->set('income', 0)
+            ->set('value', 100)
+            ->set('description', 'Opis')
+            ->set('category_id', $category->id)
+            ->set('date', now())
+            ->set('frequency', Frequency::MONTH)
+            ->set('cyclic', true)
+            ->call('save');
+
+
+        $this->call('GET', '/cron');
+        $user->refresh();
+        $budgetBalanceAfterOperation = $user->budget->balance;
+
+        $this->assertEquals((float)$budgetBalance, $budgetBalanceAfterOperation);
     }
 }
