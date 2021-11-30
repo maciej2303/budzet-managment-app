@@ -7,8 +7,9 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                <div class="flex items-center justify-center mt-4">
+                <div class="text-center mt-4">
                     <p>Czy chcesz dołączyć do budżetu należącego do: {{$budget->owner->name}}</p>
+                    <p class="text-sm text-red-600">Spowoduje to usunięcie Cię z tego budżetu i utratę dodanych operacji.</p>
                 </div>
                 <div class="flex items-center justify-center mt-4">
                     <form method="POST" action="{{ route('budget.change_budget', $budget) }}">
