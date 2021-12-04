@@ -31,13 +31,4 @@ class RaportTest extends TestCase
         $this->get('/reports')
             ->assertSeeLivewire('report');
     }
-    public function test_raport_page_contains_fields()
-    {
-        $user = User::first();
-        $this->actingAs($user);
-
-        Livewire::test(Report::class)
-            ->assertSee('Saldo konta')
-            ->assertSee('Przychód');
-    }
 }

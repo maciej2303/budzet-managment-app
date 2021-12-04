@@ -49,7 +49,7 @@ class BudgetTest extends TestCase
         $this->assertEquals((float)($budgetBalance - 100), $budgetBalanceAfterOperation);
     }
 
-    public function test_can_remove_operation()
+    public function test_can_remove_own_operation()
     {
         $user = User::first();
         $this->actingAs($user);

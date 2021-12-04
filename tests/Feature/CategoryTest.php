@@ -24,7 +24,7 @@ class CategoryTest extends TestCase
     }
 
 
-    public function test_can_create_post()
+    public function test_can_create_category()
     {
         $this->actingAs(User::first());
 
@@ -53,17 +53,5 @@ class CategoryTest extends TestCase
             ->call('destroy', $newCategory->id);
 
         $this->assertTrue(!Category::where('name', 'Przękaski')->exists());
-    }
-
-    public function test_cannot_remove_category_if_it_is_not_empty()
-    {
-        $this->actingAs(User::first());
-
-        $categoryWithOperations =  Category::whereHas('operations')->first();
-
-        Livewire::test(Categories::class)
-            ->call('destroy', $categoryWithOperations->id);
-
-        $this->assertTrue(Category::where('id', $categoryWithOperations->id)->exists());
     }
 }
