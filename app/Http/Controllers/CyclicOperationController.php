@@ -31,23 +31,19 @@ class CyclicOperationController extends Controller
                     break;
 
                 case Frequency::WEEK:
-                    $cyclicOperation->cyclic_date = Carbon::parse($cyclicOperation->cyclic_date)->addWeek();
-                    break;
-
-                case Frequency::MONTH:
-                    $cyclicOperation->cyclic_date = Carbon::parse($cyclicOperation->cyclic_date)->addMonth();
+                    $cyclicOperation->cyclic_date = Carbon::parse($cyclicOperation->cyclic_date)->addWeekNoOverflow();
                     break;
 
                 case Frequency::QUARTER:
-                    $cyclicOperation->cyclic_date = Carbon::parse($cyclicOperation->cyclic_date)->addQuarter();
+                    $cyclicOperation->cyclic_date = Carbon::parse($cyclicOperation->cyclic_date)->addQuarterNoOverflow();
                     break;
 
                 case Frequency::YEAR:
-                    $cyclicOperation->cyclic_date = Carbon::parse($cyclicOperation->cyclic_date)->addYear();
+                    $cyclicOperation->cyclic_date = Carbon::parse($cyclicOperation->cyclic_date)->addYearNoOverflow();
                     break;
 
                 default:
-                    $cyclicOperation->cyclic_date = Carbon::parse($cyclicOperation->cyclic_date)->addMonth();
+                    $cyclicOperation->cyclic_date = Carbon::parse($cyclicOperation->cyclic_date)->addMonthNoOverflow();
                     break;
             }
 
