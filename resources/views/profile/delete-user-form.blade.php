@@ -36,7 +36,7 @@
                         <x-jet-input-error for="password" class="mt-2" />
                         @isset($members)
                         <div class="mt-4">
-                            <x-jet-label>Aby dołączyć do tego budżetu, musisz przekazać właściciela innemu członkowi
+                            <x-jet-label>Aby usunąć konto, musisz przekazać właściciela innemu członkowi
                             </x-jet-label>
                             <select class="mt-1 block w-full" wire:model="owner_id">
                                 @foreach ($members as $member)

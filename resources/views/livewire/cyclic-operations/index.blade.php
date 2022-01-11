@@ -17,8 +17,9 @@
                                     <tr
                                         class="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-300 uppercase border-b border-gray-600 text-center">
                                         <th class="px-4 py-2">Nazwa</th>
-                                        <th class="px-4 py-2">Rodzaj</th>
+                                        <th class="px-4 py-2">Kwota</th>
                                         <th class="px-4 py-2">Data</th>
+                                        <th class="px-4 py-2">Cykliczna</th>
                                         <th class="px-4 py-2">Dodana przez</th>
                                         <th class="px-4 py-2">Działania</th>
                                     </tr>
@@ -34,6 +35,7 @@
                                         </td>
                                         <td class="border px-4 py-2">
                                             {{ \Carbon\Carbon::parse($operation->cyclic_date)->format('d.m.Y') }}</td>
+                                            <td class="border px-4 py-2">{{$operation->frequency}}</td>
                                         <td class="border px-4 py-2">{{ $operation->user->name }}</td>
                                         <td class="border px-4 py-2">
                                             @if(auth()->user()->ownedBudget != null)

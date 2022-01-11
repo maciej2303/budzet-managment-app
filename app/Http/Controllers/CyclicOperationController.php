@@ -34,6 +34,10 @@ class CyclicOperationController extends Controller
                     $cyclicOperation->cyclic_date = Carbon::parse($cyclicOperation->cyclic_date)->addWeek();
                     break;
 
+                case Frequency::MONTH:
+                    $cyclicOperation->cyclic_date = Carbon::parse($cyclicOperation->cyclic_date)->addMonth();
+                    break;
+
                 case Frequency::QUARTER:
                     $cyclicOperation->cyclic_date = Carbon::parse($cyclicOperation->cyclic_date)->addQuarter();
                     break;

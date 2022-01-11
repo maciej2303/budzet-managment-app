@@ -27,7 +27,7 @@ class Budget extends Component
     public $months = Months::MONTHS;
 
     protected $rules = [
-        'name' => 'required|string|max:200',
+        'name' => 'required|string|min:3|max:200',
         'value' => 'required|regex:/^\d+(\.\d{1,2})?$/',
         'description' => 'nullable|string',
         'image' => 'nullable|file',

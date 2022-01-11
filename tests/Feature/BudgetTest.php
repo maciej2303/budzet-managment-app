@@ -23,7 +23,7 @@ class BudgetTest extends TestCase
     {
         parent::setUp();
 
-        $this->seed(TestSeeder::class);
+       $this->seed(TestSeeder::class);
     }
 
 
