@@ -32,21 +32,21 @@ class Budget extends Model
 
     public function currentMonthOperations()
     {
-        $operations = $this->operations()->whereMonth('created_at', '=', now()->month)->get();
+        $operations = $this->operations()->whereMonth('created_at', '=', now()->month)->whereYear('created_at', '=', now()->year)->get();
 
         return $operations;
     }
 
     public function currentMonthExpenses()
     {
-        $expenses = $this->operations()->whereMonth('created_at', '=', now()->month)->where('income', false)->get()->sum('value');
+        $expenses = $this->operations()->whereMonth('created_at', '=', now()->month)->whereYear('created_at', '=', now()->year)->where('income', false)->get()->sum('value');
 
         return $expenses;
     }
 
     public function currentMonthIncomes()
     {
-        $expenses = $this->operations()->whereMonth('created_at', '=', now()->month)->where('income', true)->get()->sum('value');
+        $expenses = $this->operations()->whereMonth('created_at', '=', now()->month)->whereYear('created_at', '=', now()->year)->where('income', true)->get()->sum('value');
 
         return $expenses;
     }

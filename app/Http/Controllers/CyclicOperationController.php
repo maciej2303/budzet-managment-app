@@ -31,7 +31,7 @@ class CyclicOperationController extends Controller
                     break;
 
                 case Frequency::WEEK:
-                    $cyclicOperation->cyclic_date = Carbon::parse($cyclicOperation->cyclic_date)->addWeekNoOverflow();
+                    $cyclicOperation->cyclic_date = Carbon::parse($cyclicOperation->cyclic_date)->addWeek();
                     break;
 
                 case Frequency::QUARTER:
