@@ -28,7 +28,7 @@ class Report extends Component
         $this->users = $this->budget->members;
         $this->periods = [
             'current_month' => 'Bieżący miesiąc (' . $months[$this->today->month] . ')',
-            'prev_month' => 'Poprzedni miesiąc (' . $months[$this->today->month - 1] . ')',
+            'prev_month' => 'Poprzedni miesiąc (' . $months[$this->today->month == 1 ?  12 : $this->today->month - 1] . ')',
             'current_year' => 'Bieżący rok (' .  $this->today->year . ')',
             'prev_year' => 'Poprzedni rok (' . ($this->today->year - 1) . ')',
             'all' => 'Cała dostępna historia',
@@ -83,7 +83,7 @@ class Report extends Component
         $this->operations = $operations;
         $this->expenses = $this->operations->where('income', false)->sum('value');
         $this->incomes = $this->operations->where('income', true)->sum('value');
-        
+
         foreach ($this->categories as $category) {
             $category->expenses = 0;
             $category->incomes = 0;

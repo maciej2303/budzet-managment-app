@@ -28,7 +28,7 @@ Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::get('/register/{budget}', [RegisterController::class, 'registerToBudgetForm'])->name('register.budget')->middleware('signed');
-Route::post('/register-to-budget/', [RegisterController::class, 'registerToBudget'])->name('register.budget_store');
+Route::post('/register-to-budget', [RegisterController::class, 'registerToBudget'])->name('register.budget_store');
 Route::post('/login-to-new-budget', [LoginController::class, 'loginToNewBudget'])->name('login.budget_existing_account');
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
